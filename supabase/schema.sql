@@ -1,0 +1,4 @@
+-- Complete database schema for the College Team Management Web Application
+-- Run migration 00001 followed by 00002 in your Supabase SQL editor:
+-- 1. supabase/migrations/00001_initial_schema.sql
+-- 2. supabase/migrations/00002_roles_and_team_management.sql
