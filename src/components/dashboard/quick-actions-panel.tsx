@@ -16,69 +16,62 @@ export function QuickActionsPanel({ canManage = true }: QuickActionsPanelProps) 
       description: "Manage members",
       href: "/team",
       icon: Users,
-      iconColor: "text-blue-500 dark:text-cyan-400",
-      iconBg: "bg-blue-500/10 dark:bg-cyan-500/15 border-blue-500/20",
+      iconBg: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
     },
     {
       title: "Add Member",
       description: canManage ? "Invite your team" : "View directory",
       href: "/team",
       icon: UserPlus,
-      iconColor: "text-cyan-500 dark:text-cyan-300",
-      iconBg: "bg-cyan-500/10 dark:bg-cyan-500/15 border-cyan-500/20",
+      iconBg: "bg-sky-500/15 text-sky-400 border border-sky-500/30",
     },
     {
       title: "View Reports",
       description: "Weekly insights",
       href: "/reports",
       icon: FileText,
-      iconColor: "text-purple-500 dark:text-purple-300",
-      iconBg: "bg-purple-500/10 dark:bg-purple-500/15 border-purple-500/20",
+      iconBg: "bg-purple-500/15 text-purple-400 border border-purple-500/30",
     },
     {
       title: "Open Courses",
       description: "Explore & learn",
       href: "/profile",
       icon: BookOpen,
-      iconColor: "text-indigo-500 dark:text-indigo-300",
-      iconBg: "bg-indigo-500/10 dark:bg-indigo-500/15 border-indigo-500/20",
+      iconBg: "bg-indigo-500/15 text-indigo-400 border border-indigo-500/30",
     },
   ];
 
   return (
-    <Card className="glass-panel border-border/70 p-5 flex flex-col justify-between h-full">
-      <div className="flex items-center justify-between pb-3.5">
-        <h3 className="text-sm font-bold tracking-tight text-foreground">
+    <div className="glass-panel-dark rounded-2xl p-5 flex flex-col justify-between select-none">
+      <div className="flex items-center justify-between pb-3.5 border-b border-border/60 dark:border-white/[0.06]">
+        <h3 className="text-sm font-bold tracking-tight text-foreground dark:text-white">
           Quick Actions
         </h3>
-        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-          Shortcuts
-        </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 flex-1">
+      <div className="grid grid-cols-2 gap-3 mt-3.5">
         {actions.map((act) => {
           const Icon = act.icon;
           return (
             <Link
               key={act.title}
               href={act.href}
-              className="group relative flex flex-col justify-between p-3.5 rounded-2xl border border-border/60 bg-card/40 hover:bg-card/80 dark:bg-white/[0.03] dark:hover:bg-white/[0.07] hover:border-primary/40 transition-all duration-200 hover:-translate-y-0.5 shadow-xs"
+              className="group relative flex flex-col justify-between p-3.5 rounded-xl border border-border/70 bg-card/60 hover:bg-accent/40 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.07] hover:border-primary/40 dark:hover:border-cyan-400/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.15)] hover:-translate-y-0.5 transition-all duration-200"
             >
               <div className="flex items-start justify-between">
                 <div
-                  className={`flex h-9 w-9 items-center justify-center rounded-xl border ${act.iconBg} ${act.iconColor}`}
+                  className={`flex h-8 w-8 items-center justify-center rounded-xl border ${act.iconBg}`}
                 >
-                  <Icon className="h-4.5 w-4.5" />
+                  <Icon className="h-4 w-4 stroke-[2.2]" />
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground dark:text-slate-400 group-hover:text-primary dark:group-hover:text-cyan-300 group-hover:translate-x-0.5 transition-all" />
               </div>
 
               <div className="mt-3 space-y-0.5">
-                <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                <div className="text-xs font-bold text-foreground dark:text-white group-hover:text-primary dark:group-hover:text-cyan-300 transition-colors">
                   {act.title}
                 </div>
-                <div className="text-[11px] text-muted-foreground truncate">
+                <div className="text-[11px] text-muted-foreground dark:text-slate-400 truncate">
                   {act.description}
                 </div>
               </div>
@@ -86,6 +79,6 @@ export function QuickActionsPanel({ canManage = true }: QuickActionsPanelProps) 
           );
         })}
       </div>
-    </Card>
+    </div>
   );
 }

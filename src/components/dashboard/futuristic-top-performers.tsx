@@ -22,21 +22,7 @@ interface FuturisticTopPerformersProps {
 }
 
 export function FuturisticTopPerformers({ members = [] }: FuturisticTopPerformersProps) {
-  // Sample seed matching reference image if members is small
-  const defaultMembers: TopPerformerItem[] = [
-    { id: "mem-1", full_name: "Aravind K", role: "strategist", activity_points: 3450, reward_points: 1400 },
-    { id: "mem-2", full_name: "Priya S", role: "manager", activity_points: 3120, reward_points: 1200 },
-    { id: "mem-3", full_name: "Karthik R", role: "vice_captain", activity_points: 2980, reward_points: 1000 },
-    { id: "mem-4", full_name: "Saran V", role: "member", activity_points: 2800, reward_points: 960 },
-    { id: "mem-5", full_name: "Deepa M", role: "member", activity_points: 2640, reward_points: 900 },
-    { id: "mem-6", full_name: "Naveen T", role: "member", activity_points: 2410, reward_points: 800 },
-    { id: "mem-7", full_name: "Keerthana L", role: "member", activity_points: 2280, reward_points: 700 },
-    { id: "mem-8", full_name: "Vignesh P", role: "member", activity_points: 2160, reward_points: 600 },
-  ];
-
-  const sourceMembers = members && members.length >= 3 ? members : defaultMembers;
-
-  const sortedMembers = [...sourceMembers]
+  const sortedMembers = [...members]
     .map((m) => ({
       ...m,
       totalScore: (m.activity_points || 0) + (m.reward_points || 0),
@@ -67,64 +53,76 @@ export function FuturisticTopPerformers({ members = [] }: FuturisticTopPerformer
       );
     }
     return (
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted/60 font-medium text-[11px] text-muted-foreground">
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted dark:bg-white/[0.08] border border-border dark:border-white/10 font-medium text-[10px] text-muted-foreground dark:text-slate-300">
         {index + 1}
       </span>
     );
   };
 
   return (
-    <Card className="glass-panel relative overflow-hidden rounded-3xl p-5 border-border/70 shadow-glass flex flex-col justify-between h-full">
+    <div className="glass-panel-dark relative overflow-hidden rounded-2xl p-5 select-none flex flex-col justify-between h-full">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between pb-3 border-b border-border/60 dark:border-white/[0.06]">
         <h3 className="text-sm font-bold tracking-tight text-foreground">
           Top Performers
         </h3>
         <Link
           href="/leaderboard"
-          className="text-xs font-semibold text-primary hover:underline"
+          className="text-xs font-semibold text-blue-500 dark:text-blue-400 hover:underline transition-colors"
         >
           View All
         </Link>
       </div>
 
       {/* Ranked Members List */}
-      <div className="mt-2 divide-y divide-border/30">
-        {sortedMembers.map((member, index) => {
+      <div className="mt-2 divide-y divide-border/40 dark:divide-white/[0.04]">
+        {sortedMembers.length === 0 ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center space-y-2">
+            <div className="h-9 w-9 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <Star className="h-4.5 w-4.5" />
+            </div>
+            <p className="text-xs font-semibold text-foreground">No Members Yet</p>
+            <p className="text-[11px] text-muted-foreground max-w-[200px] leading-relaxed">
+              Active team members and their ranking points will appear here.
+            </p>
+          </div>
+        ) : (
+          sortedMembers.map((member, index) => {
           return (
             <Link
               key={member.id}
               href={`/profile/${member.id}`}
-              className="flex items-center justify-between py-2.5 px-2 rounded-xl hover:bg-white/[0.04] transition-all duration-200 group"
+              className="flex items-center justify-between py-2 px-1.5 rounded-xl hover:bg-muted/40 dark:hover:bg-white/[0.05] transition-all duration-150 group"
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
                 {getRankBadge(index)}
-                <Avatar className="h-7 w-7 rounded-full border border-border/70">
+                <Avatar className="h-6.5 w-6.5 rounded-full border border-border/60 dark:border-white/20">
                   {member.avatar_url && (
                     <AvatarImage src={member.avatar_url} alt={member.full_name} />
                   )}
-                  <AvatarFallback className="text-[10px] font-semibold bg-primary/15 text-primary">
+                  <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-tr from-blue-600 to-indigo-600 text-white">
                     {getInitials(member.full_name)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0">
-                  <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                  <div className="text-xs font-semibold text-foreground group-hover:text-primary dark:group-hover:text-blue-300 transition-colors truncate leading-tight">
                     {member.full_name}
                   </div>
-                  <div className="text-[10px] text-muted-foreground capitalize">
+                  <div className="text-[10px] text-muted-foreground capitalize leading-tight">
                     {ROLE_LABELS[member.role] || member.role}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 text-xs font-mono font-bold text-amber-500 shrink-0">
-                <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+              <div className="flex items-center gap-1 text-xs font-mono font-bold text-amber-400 shrink-0">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                 <span>{formatPoints(member.totalScore)}</span>
               </div>
             </Link>
           );
-        })}
+        })
+      )}
       </div>
-    </Card>
+    </div>
   );
 }

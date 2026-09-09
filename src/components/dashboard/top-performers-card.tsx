@@ -99,30 +99,22 @@ export function TopPerformersCard({
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
 
-          <div className="flex items-center gap-1 bg-muted/70 p-1 rounded-lg self-start sm:self-auto border border-border/50">
+          <div className="cosmic-tab-container self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setMetric("activity")}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-                metric === "activity"
-                  ? "bg-background text-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={metric === "activity" ? "cosmic-tab-active" : "cosmic-tab"}
             >
-              <Zap className="h-3 w-3 text-amber-500" />
-              Activity
+              <Zap className="h-3 w-3 text-amber-400" />
+              <span>Activity</span>
             </button>
             <button
               type="button"
               onClick={() => setMetric("reward")}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-                metric === "reward"
-                  ? "bg-background text-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={metric === "reward" ? "cosmic-tab-active" : "cosmic-tab"}
             >
-              <Award className="h-3 w-3 text-purple-500" />
-              Reward
+              <Award className="h-3 w-3 text-purple-400" />
+              <span>Reward</span>
             </button>
           </div>
         </div>

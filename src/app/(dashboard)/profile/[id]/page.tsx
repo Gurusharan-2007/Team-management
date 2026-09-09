@@ -155,46 +155,7 @@ export default async function MemberDetailPage({ params }: ProfilePageProps) {
     notFound();
   }
 
-  if (pointHistory.length === 0) {
-    pointHistory = [
-      {
-        id: "ph-1",
-        member_id: member.id,
-        point_type: "activity",
-        previous_value: Math.max(0, member.activity_points - 10),
-        new_value: member.activity_points,
-        change_amount: 10,
-        reason: "Active participation in weekly group codebase review",
-        changed_by: "captain-id",
-        source: "admin_adjustment",
-        actor_role: "captain",
-        created_at: new Date(Date.now() - 5 * 3600000).toISOString(),
-        actor: {
-          full_name: "Alex Rivera",
-          role: "captain",
-          email: "alex@college.edu",
-        },
-      },
-      {
-        id: "ph-2",
-        member_id: member.id,
-        point_type: "reward",
-        previous_value: Math.max(0, member.reward_points - 5),
-        new_value: member.reward_points,
-        change_amount: 5,
-        reason: "Excellence in team documentation",
-        changed_by: "vc-id",
-        source: "admin_adjustment",
-        actor_role: "vice_captain",
-        created_at: new Date(Date.now() - 26 * 3600000).toISOString(),
-        actor: {
-          full_name: "Samantha Chen",
-          role: "vice_captain",
-          email: "sam@college.edu",
-        },
-      },
-    ];
-  }
+
 
   const isSelf = callerId === member.id;
   const canAdmin = canManageMembers(callerRole);

@@ -137,10 +137,10 @@ export function ActivityTimeline({ initialActivities, totalCount }: ActivityTime
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors shrink-0 ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 ${
                 isSelected
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-muted/70 hover:bg-muted text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-xs border border-primary/40 dark:bg-gradient-to-r dark:from-blue-600/40 dark:to-indigo-600/40 dark:text-white dark:border-blue-400/50 dark:shadow-[0_0_15px_rgba(59,130,246,0.3)] font-semibold"
+                  : "bg-muted/70 hover:bg-muted text-muted-foreground hover:text-foreground border border-border dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:hover:border-cyan-400/30 dark:text-slate-300 dark:hover:text-white dark:border-white/10"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />

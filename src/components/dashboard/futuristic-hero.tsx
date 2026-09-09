@@ -20,7 +20,7 @@ export function FuturisticHero({
   userRole,
   activeMemberCount,
   teamTotalPoints,
-  currentRank = 1,
+  currentRank = null,
 }: FuturisticHeroProps) {
   // Get current hour for greeting
   const hour = new Date().getHours();
@@ -87,13 +87,19 @@ export function FuturisticHero({
         </svg>
 
         {/* Motivational Script Watermark from Reference */}
-        <div className="absolute right-12 top-8 hidden lg:block text-right select-none opacity-80">
-          <p className="font-serif italic text-lg tracking-wide text-indigo-200/70 drop-shadow">
-            Better Teams
-          </p>
-          <p className="font-serif italic text-2xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-pink-200 drop-shadow">
-            Bigger Dreams
-          </p>
+        <div className="absolute right-10 top-7 hidden lg:flex flex-col items-end text-right select-none leading-[1.15] pointer-events-none z-0">
+          <span className="font-serif italic text-lg sm:text-xl text-indigo-100/80 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            Better
+          </span>
+          <span className="font-serif italic text-lg sm:text-xl text-indigo-100/80 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            Teams
+          </span>
+          <span className="font-serif italic text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-pink-100 to-amber-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] mt-0.5">
+            Bigger
+          </span>
+          <span className="font-serif italic text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-pink-100 to-amber-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+            Dreams
+          </span>
         </div>
       </div>
 
@@ -152,7 +158,7 @@ export function FuturisticHero({
             </div>
             <div>
               <div className="text-base font-bold font-mono text-white leading-tight">
-                {currentRank ? `#${currentRank}` : formatPoints(teamTotalPoints)}
+                {currentRank ? `#${currentRank}` : teamTotalPoints > 0 ? formatPoints(teamTotalPoints) : "Active"}
               </div>
               <div className="text-[11px] text-indigo-200/80 font-medium">Team Standing</div>
             </div>

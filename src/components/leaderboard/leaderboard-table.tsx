@@ -81,57 +81,57 @@ export function LeaderboardTable({
       {/* Category Tabs and Period Filter Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border">
         {/* Categories */}
-        <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border/50 text-sm">
+        <div className="flex items-center gap-1.5 bg-muted/70 dark:bg-[#080e1c]/80 p-1 rounded-xl border border-border/80 dark:border-white/10 text-xs sm:text-sm backdrop-blur-md">
           <button
             type="button"
             onClick={() => onCategoryChange("overall")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
               category === "overall"
-                ? "bg-background text-foreground shadow-sm font-semibold"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs border border-border dark:bg-gradient-to-r dark:from-blue-600/35 dark:to-indigo-600/35 dark:text-white font-semibold dark:border-blue-400/50 dark:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] hover:border-border dark:hover:border-cyan-400/30 border border-transparent"
             }`}
           >
-            <Trophy className="w-4 h-4 text-amber-500" />
+            <Trophy className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>Overall</span>
           </button>
 
           <button
             type="button"
             onClick={() => onCategoryChange("activity")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
               category === "activity"
-                ? "bg-background text-foreground shadow-sm font-semibold"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs border border-border dark:bg-gradient-to-r dark:from-blue-600/35 dark:to-indigo-600/35 dark:text-white font-semibold dark:border-blue-400/50 dark:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] hover:border-border dark:hover:border-cyan-400/30 border border-transparent"
             }`}
           >
-            <Zap className="w-4 h-4 text-sky-500" />
+            <Zap className="w-4 h-4 text-sky-500 dark:text-sky-400" />
             <span>Activity Points</span>
           </button>
 
           <button
             type="button"
             onClick={() => onCategoryChange("reward")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all ${
               category === "reward"
-                ? "bg-background text-foreground shadow-sm font-semibold"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs border border-border dark:bg-gradient-to-r dark:from-blue-600/35 dark:to-indigo-600/35 dark:text-white font-semibold dark:border-blue-400/50 dark:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] hover:border-border dark:hover:border-cyan-400/30 border border-transparent"
             }`}
           >
-            <Gift className="w-4 h-4 text-emerald-500" />
+            <Gift className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
             <span>Reward Points</span>
           </button>
         </div>
 
         {/* Period Selector & Formula Popover Trigger */}
         <div className="flex items-center gap-2 self-end sm:self-auto">
-          <div className="inline-flex items-center rounded-md border border-border bg-background p-0.5 text-xs font-medium text-muted-foreground">
+          <div className="inline-flex items-center rounded-xl border border-border/80 dark:border-white/10 bg-muted/70 dark:bg-[#080e1c]/80 p-1 text-xs font-medium text-muted-foreground dark:text-slate-300 backdrop-blur-md gap-1">
             <button
               type="button"
               onClick={() => onPeriodChange("all_time")}
-              className={`px-2.5 py-1 rounded transition-colors ${
+              className={`px-2.5 py-1 rounded-lg transition-all ${
                 period === "all_time"
-                  ? "bg-muted text-foreground font-semibold"
-                  : "hover:text-foreground"
+                  ? "bg-background text-foreground font-semibold border border-border dark:bg-white/[0.12] dark:text-white dark:border-white/15 shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] border border-transparent"
               }`}
             >
               All Time
@@ -139,10 +139,10 @@ export function LeaderboardTable({
             <button
               type="button"
               onClick={() => onPeriodChange("current_week")}
-              className={`px-2.5 py-1 rounded transition-colors ${
+              className={`px-2.5 py-1 rounded-lg transition-all ${
                 period === "current_week"
-                  ? "bg-muted text-foreground font-semibold"
-                  : "hover:text-foreground"
+                  ? "bg-background text-foreground font-semibold border border-border dark:bg-white/[0.12] dark:text-white dark:border-white/15 shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] border border-transparent"
               }`}
             >
               Current Week
@@ -150,10 +150,10 @@ export function LeaderboardTable({
             <button
               type="button"
               onClick={() => onPeriodChange("previous_week")}
-              className={`px-2.5 py-1 rounded transition-colors ${
+              className={`px-2.5 py-1 rounded-lg transition-all ${
                 period === "previous_week"
-                  ? "bg-muted text-foreground font-semibold"
-                  : "hover:text-foreground"
+                  ? "bg-background text-foreground font-semibold border border-border dark:bg-white/[0.12] dark:text-white dark:border-white/15 shadow-xs"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/[0.08] border border-transparent"
               }`}
             >
               Previous Week
@@ -163,7 +163,7 @@ export function LeaderboardTable({
           <button
             type="button"
             onClick={() => setShowFormulaModal(true)}
-            className="p-1.5 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors"
+            className="p-1.5 text-muted-foreground hover:text-foreground dark:text-slate-400 dark:hover:text-white rounded-lg hover:bg-muted dark:hover:bg-white/[0.08] border border-transparent hover:border-border dark:hover:border-white/10 transition-colors"
             title="View Overall Scoring Formula"
           >
             <HelpCircle className="w-4 h-4" />
@@ -242,8 +242,8 @@ export function LeaderboardTable({
                       key={entry.member_id}
                       className={`group transition-colors ${
                         isCurrent
-                          ? "bg-primary/[0.04] border-l-2 border-l-primary hover:bg-primary/[0.07]"
-                          : "hover:bg-muted/50"
+                          ? "bg-primary/10 border-l-2 border-l-primary hover:bg-primary/15"
+                          : "hover:bg-muted/50 dark:hover:bg-white/[0.04]"
                       }`}
                     >
                       {/* Rank */}

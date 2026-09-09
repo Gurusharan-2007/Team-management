@@ -64,37 +64,25 @@ export function TeamTrendChart({
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
 
-          <div className="flex items-center gap-1 bg-muted p-1 rounded-md self-start sm:self-auto">
+          <div className="cosmic-tab-container self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setRange(4)}
-              className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
-                range === 4
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={range === 4 ? "cosmic-tab-active" : "cosmic-tab"}
             >
               4 Weeks
             </button>
             <button
               type="button"
               onClick={() => setRange(8)}
-              className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
-                range === 8
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={range === 8 ? "cosmic-tab-active" : "cosmic-tab"}
             >
               8 Weeks
             </button>
             <button
               type="button"
               onClick={() => setRange(12)}
-              className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
-                range === 12
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={range === 12 ? "cosmic-tab-active" : "cosmic-tab"}
             >
               12 Weeks
             </button>

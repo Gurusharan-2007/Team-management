@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowRight, ShieldCheck, BarChart3, Award, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function HomePage() {
+  if (process.env.NODE_ENV !== "production") {
+    redirect("/dashboard");
+  }
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       {/* Top Navigation */}

@@ -15,33 +15,35 @@ import { getGoalsWithProgressAction } from "@/actions/goals";
 import { getWeeklyReportsListAction, getWeeklyReportDetailsAction, getTeamTrendsAction } from "@/actions/reports";
 import { getPersonalRankAction } from "@/actions/leaderboard";
 import { getAchievementsCatalogAction } from "@/actions/achievements";
+import { getNotificationsAction } from "@/actions/notifications";
 import { formatWeekRange } from "@/lib/date/week";
 import { PointHistoryItemWithActor, UserRole, Profile } from "@/types/domain";
 
 export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
-  const userName = currentUser.profile?.full_name || "Gurusharan G";
-  const userRole = currentUser.role || ("captain" as UserRole);
+  const userName = currentUser.profile?.full_name || "Team Member";
+  const userRole = currentUser.role || ("member" as UserRole);
   const canManage = userRole === "captain" || userRole === "vice_captain";
 
-  let totalMembers = 5;
-  let activeMemberCount = 5;
-  let totalTeamActivityPoints = 2850;
-  let totalTeamRewardPoints = 1320;
-  let totalCoursesCompleted = 8;
-  let userCoursesCompleted = 4;
+  let totalMembers = 0;
+  let activeMemberCount = 0;
+  let totalTeamActivityPoints = 0;
+  let totalTeamRewardPoints = 0;
+  let totalCoursesCompleted = 0;
+  let userCoursesCompleted = 0;
 
   let allMembers: any[] = [];
   let recentPointEvents: PointHistoryItemWithActor[] = [];
 
   // 1. Fetch domain data concurrently
-  const [goalsResult, trendsResult, rankResult, achievementsResult, reportsResult] =
+  const [goalsResult, trendsResult, rankResult, achievementsResult, reportsResult, notifsResult] =
     await Promise.all([
       getGoalsWithProgressAction(),
       getTeamTrendsAction(8),
       getPersonalRankAction(),
       getAchievementsCatalogAction(currentUser.user?.id),
       getWeeklyReportsListAction(),
+      getNotificationsAction("all"),
     ]);
 
   const goals = goalsResult.goals || [];
@@ -49,6 +51,7 @@ export default async function DashboardPage() {
   const personalRank = rankResult.personalRank || null;
   const achievements = achievementsResult.catalog || [];
   const weeklyReports = reportsResult.reports || [];
+  const notifications = notifsResult.notifications || [];
 
   if (currentUser.isConfigured) {
     try {
@@ -100,87 +103,97 @@ export default async function DashboardPage() {
         recentPointEvents = pointsData as PointHistoryItemWithActor[];
       }
     } catch {
-      // Fallback preview
+      // Handled gracefully via empty states
     }
   }
 
-  // Fallback seed profiles matching reference image if empty
-  if (allMembers.length === 0) {
-    allMembers = [
-      { id: "mem-1", full_name: "Aravind K", role: "strategist" as UserRole, status: "active", activity_points: 3450, reward_points: 1400 },
-      { id: "mem-2", full_name: "Priya S", role: "manager" as UserRole, status: "active", activity_points: 3120, reward_points: 1200 },
-      { id: "mem-3", full_name: "Karthik R", role: "vice_captain" as UserRole, status: "active", activity_points: 2980, reward_points: 1000 },
-      { id: "mem-4", full_name: "Saran V", role: "member" as UserRole, status: "active", activity_points: 2800, reward_points: 960 },
-      { id: "mem-5", full_name: "Deepa M", role: "member" as UserRole, status: "active", activity_points: 2640, reward_points: 900 },
-      { id: "mem-6", full_name: "Naveen T", role: "member" as UserRole, status: "active", activity_points: 2410, reward_points: 800 },
-      { id: "mem-7", full_name: "Keerthana L", role: "member" as UserRole, status: "active", activity_points: 2280, reward_points: 700 },
-      { id: "mem-8", full_name: "Vignesh P", role: "member" as UserRole, status: "active", activity_points: 2160, reward_points: 600 },
-    ];
+  let activityGrowthPct: number | null = null;
+  let rewardGrowthPct: number | null = null;
+
+  if (weeklyReports.length > 0) {
+    const { report } = await getWeeklyReportDetailsAction(weeklyReports[0].id);
+    if (report) {
+      activityGrowthPct = report.activity_points_growth_percentage ?? null;
+      rewardGrowthPct = report.reward_points_growth_percentage ?? null;
+    }
   }
 
   return (
-    <div className="space-y-6 pb-6">
-      {/* 1. Top Section: Futuristic Hero + Quick Actions Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-8 flex">
-          <div className="w-full">
-            <FuturisticHero
-              userName={userName}
-              userRole={userRole}
-              activeMemberCount={activeMemberCount}
-              teamTotalPoints={totalTeamActivityPoints + totalTeamRewardPoints}
-              currentRank={personalRank?.overall_rank || 1}
-            />
-          </div>
-        </div>
-
-        <div className="lg:col-span-4 flex">
-          <div className="w-full">
-            <QuickActionsPanel canManage={canManage} />
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Metric Cards Row: 4 Glass Cards with Sparklines (from reference image) */}
-      <FuturisticMetricCards
-        activityPoints={totalTeamActivityPoints || 2850}
-        activityGrowthPct={12}
-        rewardPoints={totalTeamRewardPoints || 1320}
-        rewardGrowthPct={8}
-        coursesCompleted={totalCoursesCompleted || 8}
-        currentRank={personalRank?.overall_rank || 3}
-      />
-
-      {/* 3. Main Body Grid: Left (Analytics, Activity, Achievements) + Right (Performers, Notifications, Next Steps) */}
+    <div className="space-y-6 sm:space-y-7 pb-8">
+      {/* 2-Column Master Layout matching Reference Image */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column (8 cols) */}
+        {/* ========================================================================= */}
+        {/* CENTER-LEFT PRIMARY COLUMN (Cols 1-8 / ~67-70% width)                    */}
+        {/* ========================================================================= */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Main Analytics: Activity & Reward Trends */}
-          <FuturisticTrendsChart
-            initialTrends={teamTrends}
-            currentWeekActivity={totalTeamActivityPoints || 2850}
-            currentWeekReward={totalTeamRewardPoints || 1320}
+          {/* 1. Panoramic Mountain Sunrise Hero Banner */}
+          <FuturisticHero
+            userName={userName}
+            userRole={userRole}
+            activeMemberCount={activeMemberCount}
+            teamTotalPoints={totalTeamActivityPoints + totalTeamRewardPoints}
+            currentRank={personalRank?.overall_rank || null}
           />
 
-          {/* Sub-grid: Recent Activity (left) & Achievements (right) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-            <FuturisticRecentActivity pointEvents={recentPointEvents} />
-            <FuturisticAchievementsTile achievements={achievements} />
+          {/* 2. 4 Metric Cards Row (Activity, Reward, Courses, Rank) */}
+          <FuturisticMetricCards
+            activityPoints={totalTeamActivityPoints}
+            activityGrowthPct={activityGrowthPct}
+            rewardPoints={totalTeamRewardPoints}
+            rewardGrowthPct={rewardGrowthPct}
+            coursesCompleted={totalCoursesCompleted}
+            currentRank={personalRank?.overall_rank || null}
+          />
+
+          {/* 3. Middle Analytics Row: Activity & Reward Trends (7 cols) + Top Performers (5 cols) */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+            <div className="md:col-span-7 flex">
+              <div className="w-full">
+                <FuturisticTrendsChart
+                  initialTrends={teamTrends}
+                  currentWeekActivity={totalTeamActivityPoints}
+                  currentWeekReward={totalTeamRewardPoints}
+                />
+              </div>
+            </div>
+
+            <div className="md:col-span-5 flex">
+              <div className="w-full">
+                <FuturisticTopPerformers members={allMembers} />
+              </div>
+            </div>
           </div>
 
-          {/* Inspirational Progress Banner */}
-          <FuturisticInspirationCard />
+          {/* 4. Bottom Row: Recent Activity & Milestones (7 cols) + Inspiration Card (5 cols) */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+            <div className="md:col-span-7 flex">
+              <div className="w-full">
+                <FuturisticRecentActivity
+                  pointEvents={recentPointEvents}
+                  achievements={achievements}
+                />
+              </div>
+            </div>
+
+            <div className="md:col-span-5 flex">
+              <div className="w-full">
+                <FuturisticInspirationCard />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Right Column (4 cols) */}
+        {/* ========================================================================= */}
+        {/* RIGHT RAIL COLUMN (Cols 9-12 / ~30-33% width)                             */}
+        {/* ========================================================================= */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Top Performers Leaderboard Card */}
-          <FuturisticTopPerformers members={allMembers} />
+          {/* 1. Quick Actions (Top of Right Rail) */}
+          <QuickActionsPanel canManage={canManage} />
 
-          {/* Notifications Card */}
-          <FuturisticNotificationsCard />
+          {/* 2. Notifications Card (Middle of Right Rail) */}
+          <FuturisticNotificationsCard notifications={notifications} />
 
-          {/* Next Steps / Goals Card */}
+          {/* 3. Next Steps / Goals Card (Bottom of Right Rail) */}
           <FuturisticNextSteps goals={goals} />
         </div>
       </div>

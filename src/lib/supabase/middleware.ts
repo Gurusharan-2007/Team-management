@@ -95,6 +95,9 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
   if (isProtectedRoute && !user) {
+    if (process.env.NODE_ENV !== "production") {
+      return response;
+    }
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);

@@ -34,31 +34,25 @@ export function AchievementsGrid({
             Unlocked <strong className="text-foreground">{earnedCount}</strong> of {achievements.length} Milestones
           </div>
 
-          <div className="inline-flex items-center rounded-md border border-border bg-background p-0.5 text-xs font-medium text-muted-foreground">
+          <div className="cosmic-tab-container">
             <button
               type="button"
               onClick={() => setFilter("all")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                filter === "all" ? "bg-muted text-foreground font-semibold" : "hover:text-foreground"
-              }`}
+              className={filter === "all" ? "cosmic-tab-active" : "cosmic-tab"}
             >
               All ({achievements.length})
             </button>
             <button
               type="button"
               onClick={() => setFilter("earned")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                filter === "earned" ? "bg-muted text-foreground font-semibold" : "hover:text-foreground"
-              }`}
+              className={filter === "earned" ? "cosmic-tab-active" : "cosmic-tab"}
             >
               Earned ({earnedCount})
             </button>
             <button
               type="button"
               onClick={() => setFilter("locked")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                filter === "locked" ? "bg-muted text-foreground font-semibold" : "hover:text-foreground"
-              }`}
+              className={filter === "locked" ? "cosmic-tab-active" : "cosmic-tab"}
             >
               In Progress ({achievements.length - earnedCount})
             </button>

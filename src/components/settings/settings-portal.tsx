@@ -50,30 +50,28 @@ export function SettingsPortal({
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border/70 pb-2 scrollbar-none">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shrink-0 ${
-                isActive
-                  ? "bg-primary text-primary-foreground shadow-xs"
-                  : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{tab.label}</span>
-              {tab.adminOnly && (
-                <span className="text-[10px] opacity-80 uppercase tracking-wider font-bold">
-                  (Admin)
-                </span>
-              )}
-            </button>
-          );
-        })}
+      <div className="flex items-center gap-2 overflow-x-auto border-b border-border/60 dark:border-white/[0.06] pb-3 scrollbar-none">
+        <div className="cosmic-tab-container">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={isActive ? "cosmic-tab-active" : "cosmic-tab"}
+              >
+                <Icon className="h-4 w-4" />
+                <span>{tab.label}</span>
+                {tab.adminOnly && (
+                  <span className="text-[9px] opacity-90 uppercase tracking-wider font-bold ml-1 px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    Admin
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Tab Content Panels */}

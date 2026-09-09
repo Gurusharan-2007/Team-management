@@ -57,15 +57,16 @@ export function Navbar({
   }, []);
 
   return (
-    <header className="sticky top-2 z-30 px-4 sm:px-6 py-2">
-      <div className="flex h-14 w-full items-center justify-between rounded-2xl glass-panel px-4 shadow-glass transition-all">
+    <header className="sticky top-2 z-30 px-2 sm:px-3 py-1">
+      <div className="flex h-14 w-full items-center justify-between transition-all">
         {/* Left: Mobile Menu & Search */}
         <div className="flex items-center gap-3 flex-1 max-w-xl">
+          {/* Mobile menu trigger */}
           {/* Mobile menu trigger */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-8 w-8 text-muted-foreground hover:text-foreground shrink-0"
+            className="lg:hidden h-8 w-8 text-muted-foreground hover:text-foreground dark:hover:text-white shrink-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
@@ -81,32 +82,32 @@ export function Navbar({
             onSubmit={handleSearchSubmit}
             className="relative flex items-center w-full max-w-md"
           >
-            <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground/70 pointer-events-none" />
+            <Search className="absolute left-3.5 h-4 w-4 text-muted-foreground dark:text-white/60 pointer-events-none" />
             <input
               id="global-search-input"
               type="text"
               placeholder="Search team members, courses, or anything..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl bg-background/50 dark:bg-white/[0.04] border border-border/60 py-2 pl-9 pr-14 text-xs text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all backdrop-blur-md"
+              className="w-full rounded-full bg-card/70 dark:bg-white/[0.08] border border-border/70 dark:border-white/15 py-2 pl-10 pr-14 text-xs text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/60 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-border dark:focus:border-white/30 transition-all backdrop-blur-xl shadow-xs"
             />
-            <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 rounded border border-border/70 bg-muted/40 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+            <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 rounded-full border border-border/70 dark:border-white/20 bg-muted/50 dark:bg-white/[0.08] px-2 py-0.5 text-[10px] font-mono text-muted-foreground dark:text-white/80">
               <span className="text-[11px]">⌘</span>K
             </kbd>
           </form>
         </div>
 
-        {/* Right Actions: Notifications, Updates, Profile Dropdown */}
+        {/* Right Actions: Notifications, Messages, Profile Dropdown */}
         <div className="flex items-center gap-2.5 shrink-0">
           {/* Notification Button with Pill Badge (from reference image) */}
           <Link
             href="/notifications"
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-background/50 dark:bg-white/[0.04] border border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all shadow-xs"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-card/70 dark:bg-white/[0.08] border border-border/70 dark:border-white/15 text-muted-foreground dark:text-white/90 hover:text-foreground dark:hover:text-white hover:bg-muted/50 dark:hover:bg-white/[0.14] transition-all shadow-xs backdrop-blur-xl"
             title="Notifications"
           >
             <Bell className="h-4 w-4" />
             {unreadNotificationsCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white shadow-xs">
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#ef4444] px-1 text-[9px] font-bold text-white shadow-[0_0_8px_rgba(239,68,68,0.7)]">
                 {unreadNotificationsCount > 9 ? "9+" : unreadNotificationsCount}
               </span>
             )}
@@ -115,7 +116,7 @@ export function Navbar({
           {/* Activity / Messages Icon */}
           <Link
             href="/activity"
-            className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl bg-background/50 dark:bg-white/[0.04] border border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all shadow-xs"
+            className="hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-card/70 dark:bg-white/[0.08] border border-border/70 dark:border-white/15 text-muted-foreground dark:text-white/90 hover:text-foreground dark:hover:text-white hover:bg-muted/50 dark:hover:bg-white/[0.14] transition-all shadow-xs backdrop-blur-xl"
             title="Activity Feed"
           >
             <MessageSquare className="h-4 w-4" />
@@ -124,23 +125,23 @@ export function Navbar({
           {/* User Profile Chip (from reference image) */}
           <Link
             href="/profile"
-            className="flex items-center gap-2.5 rounded-xl bg-background/50 dark:bg-white/[0.04] border border-border/60 p-1.5 pr-2.5 hover:bg-muted/40 transition-all shadow-xs group select-none"
+            className="flex items-center gap-2.5 rounded-full bg-card/70 dark:bg-white/[0.08] border border-border/70 dark:border-white/15 p-1 pr-3 hover:bg-muted/50 dark:hover:bg-white/[0.14] transition-all shadow-xs backdrop-blur-xl group select-none"
             title="My Profile"
           >
-            <Avatar className="h-8 w-8 rounded-lg border border-border/80">
-              <AvatarFallback className="text-xs font-semibold bg-gradient-to-tr from-blue-600 to-indigo-600 text-white">
+            <Avatar className="h-7.5 w-7.5 rounded-full border border-border/60 dark:border-white/25">
+              <AvatarFallback className="text-[11px] font-bold bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 text-white">
                 {getInitials(userName)}
               </AvatarFallback>
             </Avatar>
             <div className="hidden md:flex flex-col text-left">
-              <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+              <span className="text-xs font-bold text-foreground dark:text-white group-hover:text-primary dark:group-hover:text-cyan-300 transition-colors leading-tight">
                 {userName}
               </span>
-              <span className="text-[10px] text-muted-foreground capitalize leading-tight">
+              <span className="text-[10px] text-muted-foreground dark:text-slate-300 capitalize leading-tight">
                 {ROLE_LABELS[userRole] || userRole}
               </span>
             </div>
-            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground dark:text-slate-300 group-hover:text-foreground dark:group-hover:text-white transition-colors" />
           </Link>
         </div>
       </div>

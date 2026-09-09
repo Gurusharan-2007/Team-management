@@ -88,31 +88,23 @@ export function LeaderboardPortal({
       <PersonalRankBanner rankSummary={personalRank} userName={userName} />
 
       {/* Main View Navigation Tabs */}
-      <div className="flex items-center justify-between border-b border-border pb-px">
-        <div className="flex items-center gap-2 sm:gap-4 text-sm font-medium">
+      <div className="flex items-center justify-between pb-2 border-b border-border/60 dark:border-white/[0.06]">
+        <div className="cosmic-tab-container">
           <button
             type="button"
             onClick={() => setActiveTab("rankings")}
-            className={`pb-3 px-1 border-b-2 transition-all flex items-center gap-1.5 ${
-              activeTab === "rankings"
-                ? "border-primary text-foreground font-semibold"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+            className={activeTab === "rankings" ? "cosmic-tab-active" : "cosmic-tab"}
           >
-            <Trophy className="w-4 h-4 text-amber-500" />
+            <Trophy className="w-4 h-4 text-amber-400" />
             <span>Leaderboard</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("achievements")}
-            className={`pb-3 px-1 border-b-2 transition-all flex items-center gap-1.5 ${
-              activeTab === "achievements"
-                ? "border-primary text-foreground font-semibold"
-                : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+            className={activeTab === "achievements" ? "cosmic-tab-active" : "cosmic-tab"}
           >
-            <Award className="w-4 h-4 text-primary" />
+            <Award className="w-4 h-4 text-sky-400" />
             <span>Milestones & Badges</span>
           </button>
 
@@ -120,21 +112,17 @@ export function LeaderboardPortal({
             <button
               type="button"
               onClick={() => setActiveTab("admin")}
-              className={`pb-3 px-1 border-b-2 transition-all flex items-center gap-1.5 ${
-                activeTab === "admin"
-                  ? "border-primary text-foreground font-semibold"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              className={activeTab === "admin" ? "cosmic-tab-active" : "cosmic-tab"}
             >
-              <Settings2 className="w-4 h-4 text-muted-foreground" />
+              <Settings2 className="w-4 h-4 text-purple-400" />
               <span>Milestone Config</span>
             </button>
           )}
         </div>
 
         {isPending && (
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground pb-2">
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-400" />
             <span>Updating...</span>
           </div>
         )}

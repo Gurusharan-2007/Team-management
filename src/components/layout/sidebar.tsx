@@ -86,20 +86,20 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "relative flex h-full flex-col border-r border-border/60 bg-sidebar/85 backdrop-blur-2xl text-sidebar-foreground transition-all duration-300 ease-in-out select-none",
+        "relative flex h-[calc(100vh-1rem)] flex-col rounded-3xl border border-border/70 dark:border-white/10 glass-panel-primary text-sidebar-foreground transition-all duration-300 ease-in-out select-none my-2 ml-2 shadow-glass",
         isCollapsed ? "w-[68px]" : "w-[245px]",
         className
       )}
     >
       {/* Brand Header */}
-      <div className="flex h-16 items-center justify-between border-b border-border/40 px-4">
+      <div className="flex h-16 items-center justify-between border-b border-border/60 dark:border-white/[0.06] px-4">
         <Link
           href="/dashboard"
           className="flex items-center gap-3 overflow-hidden font-semibold tracking-tight group"
           onClick={onNavClick}
         >
           {/* Glowing 4-Point Cosmic Star Logo */}
-          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 shadow-[0_0_15px_rgba(56,189,248,0.5)] transition-transform duration-200 group-hover:scale-105">
+          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-400 via-blue-600 to-indigo-600 shadow-[0_0_18px_rgba(56,189,248,0.6)] transition-transform duration-200 group-hover:scale-105">
             <svg
               className="h-4.5 w-4.5 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]"
               viewBox="0 0 24 24"
@@ -109,14 +109,9 @@ export function Sidebar({
             </svg>
           </div>
           {!isCollapsed && (
-            <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-sm font-bold tracking-tight text-foreground">
-                Team Portal
-              </span>
-              <span className="truncate text-[10px] text-muted-foreground/80 font-medium">
-                Operations &amp; Analytics
-              </span>
-            </div>
+            <span className="truncate text-base font-bold tracking-tight text-foreground dark:text-white">
+              Team Portal
+            </span>
           )}
         </Link>
 
@@ -125,7 +120,7 @@ export function Sidebar({
             variant="ghost"
             size="icon"
             onClick={onToggleCollapse}
-            className="hidden lg:flex h-7 w-7 text-muted-foreground hover:text-foreground"
+            className="hidden lg:flex h-7 w-7 text-muted-foreground hover:text-foreground dark:hover:text-white"
             aria-label="Collapse sidebar"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -150,29 +145,24 @@ export function Sidebar({
               className={cn(
                 "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all duration-200",
                 isActive
-                  ? "bg-gradient-to-r from-blue-600/25 via-indigo-600/20 to-blue-500/10 border border-blue-400/40 text-foreground font-semibold shadow-[0_0_15px_rgba(59,130,246,0.25)] dark:text-white"
-                  : "text-muted-foreground hover:bg-white/[0.05] hover:text-foreground"
+                  ? "bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white font-bold shadow-[0_0_20px_rgba(37,99,235,0.45)] border border-blue-400/40"
+                  : "text-muted-foreground/80 hover:bg-muted/50 dark:hover:bg-white/[0.06] hover:text-foreground dark:hover:text-white"
               )}
             >
               <Icon
                 className={cn(
                   "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-cyan-400" : "text-muted-foreground group-hover:text-foreground"
+                  isActive ? "text-white" : "text-muted-foreground group-hover:text-foreground dark:group-hover:text-white"
                 )}
               />
               {!isCollapsed && <span className="truncate">{item.title}</span>}
 
               {/* Notification Badge */}
               {!isCollapsed && item.badge !== undefined && item.badge > 0 ? (
-                <span className="ml-auto flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white shadow-xs">
+                <span className="ml-auto flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#ef4444] px-1 text-[9px] font-bold text-white shadow-[0_0_8px_rgba(239,68,68,0.6)]">
                   {item.badge > 9 ? "9+" : item.badge}
                 </span>
               ) : null}
-
-              {/* Active Indicator Bar */}
-              {!isCollapsed && isActive && (
-                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
-              )}
             </Link>
           );
         })}
@@ -182,7 +172,7 @@ export function Sidebar({
       <div className="border-t border-border/40 p-3 space-y-3">
         {/* Motivational Card (from reference image) */}
         {!isCollapsed && (
-          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-blue-950/40 via-indigo-950/30 to-purple-950/20 p-3 shadow-glass backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-xl border border-border/60 dark:border-white/10 bg-card/50 dark:bg-gradient-to-br dark:from-blue-950/40 dark:via-indigo-950/30 dark:to-purple-950/20 p-3 shadow-glass backdrop-blur-md">
             <div className="space-y-1">
               <p className="text-[11px] font-medium text-muted-foreground leading-snug">
                 &ldquo;Great teams build great things&rdquo;
@@ -205,29 +195,42 @@ export function Sidebar({
         )}
 
         {/* Dark Mode Switch (from reference image) */}
-        {!isCollapsed && mounted && (
-          <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/40 px-3 py-2 text-xs backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              {isDark ? <Moon className="h-3.5 w-3.5 text-indigo-400" /> : <Sun className="h-3.5 w-3.5 text-amber-500" />}
-              <span className="text-[11px] font-medium text-foreground/80">Dark Mode</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-              className={cn(
-                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
-                isDark ? "bg-primary" : "bg-muted"
-              )}
-              aria-label="Toggle dark mode"
-            >
-              <span
+        {mounted && (
+          !isCollapsed ? (
+            <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/40 px-3 py-2 text-xs backdrop-blur-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                {isDark ? <Moon className="h-3.5 w-3.5 text-indigo-400" /> : <Sun className="h-3.5 w-3.5 text-amber-500" />}
+                <span className="text-[11px] font-medium text-foreground/80">Dark Mode</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTheme(isDark ? "light" : "dark")}
                 className={cn(
-                  "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out",
-                  isDark ? "translate-x-4" : "translate-x-0"
+                  "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
+                  isDark ? "bg-primary" : "bg-muted"
                 )}
-              />
-            </button>
-          </div>
+                aria-label="Toggle dark mode"
+              >
+                <span
+                  className={cn(
+                    "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out",
+                    isDark ? "translate-x-4" : "translate-x-0"
+                  )}
+                />
+              </button>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="h-8 w-8 text-muted-foreground hover:text-foreground mx-auto flex items-center justify-center"
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Moon className="h-4 w-4 text-indigo-400" /> : <Sun className="h-4 w-4 text-amber-500" />}
+            </Button>
+          )
         )}
 
         {/* User Info & Signout */}

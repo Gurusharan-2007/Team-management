@@ -113,12 +113,23 @@ const config: Config = {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
         },
+        "aurora-slow": {
+          "0%, 100%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -25px) scale(1.06)" },
+          "66%": { transform: "translate(-25px, 20px) scale(0.96)" },
+        },
+        "aurora-drift": {
+          "0%, 100%": { transform: "translate(0px, 0px)" },
+          "50%": { transform: "translate(-35px, -20px)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         "slide-in-right": "slide-in-right 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
         float: "float 4s ease-in-out infinite",
         "pulse-subtle": "pulse_subtle 3s ease-in-out infinite",
+        "aurora-slow": "aurora-slow 24s ease-in-out infinite",
+        "aurora-drift": "aurora-drift 30s ease-in-out infinite",
       },
     },
   },

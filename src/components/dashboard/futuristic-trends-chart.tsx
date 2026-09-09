@@ -23,8 +23,8 @@ interface FuturisticTrendsChartProps {
 
 export function FuturisticTrendsChart({
   initialTrends = [],
-  currentWeekActivity = 2850,
-  currentWeekReward = 1320,
+  currentWeekActivity = 0,
+  currentWeekReward = 0,
 }: FuturisticTrendsChartProps) {
   const [isMounted, setIsMounted] = React.useState(false);
   const [range, setRange] = React.useState<4 | 8 | 12>(8);
@@ -33,83 +33,22 @@ export function FuturisticTrendsChart({
     setIsMounted(true);
   }, []);
 
-  // Fallback high-fidelity sample trends matching reference image if empty
-  const defaultMockTrends: WeeklyTrendPoint[] = [
-    {
-      week_start: "2025-03-01",
-      week_end: "2025-03-07",
-      week_label: "W1",
-      activity_points: 1100,
-      reward_points: 500,
-    },
-    {
-      week_start: "2025-03-08",
-      week_end: "2025-03-14",
-      week_label: "W2",
-      activity_points: 1450,
-      reward_points: 620,
-    },
-    {
-      week_start: "2025-03-15",
-      week_end: "2025-03-21",
-      week_label: "W3",
-      activity_points: 1700,
-      reward_points: 750,
-    },
-    {
-      week_start: "2025-03-22",
-      week_end: "2025-03-28",
-      week_label: "W4",
-      activity_points: 1980,
-      reward_points: 920,
-    },
-    {
-      week_start: "2025-03-29",
-      week_end: "2025-04-04",
-      week_label: "W5",
-      activity_points: 1850,
-      reward_points: 880,
-    },
-    {
-      week_start: "2025-04-05",
-      week_end: "2025-04-11",
-      week_label: "W6",
-      activity_points: 2300,
-      reward_points: 1100,
-    },
-    {
-      week_start: "2025-04-12",
-      week_end: "2025-04-18",
-      week_label: "W7",
-      activity_points: 2550,
-      reward_points: 1180,
-    },
-    {
-      week_start: "2025-04-19",
-      week_end: "2025-04-25",
-      week_label: "W8",
-      activity_points: currentWeekActivity,
-      reward_points: currentWeekReward,
-    },
-  ];
-
-  const trendsToUse =
-    initialTrends && initialTrends.length >= 3 ? initialTrends : defaultMockTrends;
+  const hasData = initialTrends && initialTrends.length > 0;
 
   const displayedData = React.useMemo(() => {
-    return trendsToUse.slice(-range).map((item, idx) => ({
+    if (!hasData) return [];
+    return initialTrends.slice(-range).map((item, idx) => ({
       ...item,
-      // Format clean W1, W2 labels if needed
-      displayLabel: item.week_label.startsWith("W") ? item.week_label : `W${idx + 1}`,
+      displayLabel: item.week_label || `W${idx + 1}`,
     }));
-  }, [trendsToUse, range]);
+  }, [initialTrends, range, hasData]);
 
   return (
-    <Card className="glass-panel relative overflow-hidden rounded-3xl p-6 border-border/70 shadow-glass">
+    <div className="glass-panel-dark relative overflow-hidden rounded-2xl p-5 select-none h-full flex flex-col justify-between">
       {/* Chart Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/60 dark:border-white/[0.06]">
         <div>
-          <h3 className="text-base font-bold tracking-tight text-foreground flex items-center gap-2">
+          <h3 className="text-sm sm:text-base font-bold tracking-tight text-foreground flex items-center gap-2">
             Activity &amp; Reward Trends
           </h3>
           <p className="text-xs text-muted-foreground mt-0.5">
@@ -117,36 +56,63 @@ export function FuturisticTrendsChart({
           </p>
         </div>
 
-        {/* Legend Pills & Period Filter */}
+        {/* Range & Legend Controls */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Legend */}
-          <div className="flex items-center gap-3 text-xs font-medium">
-            <span className="flex items-center gap-1.5 text-cyan-400">
-              <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
-              Activity Points
-            </span>
-            <span className="flex items-center gap-1.5 text-purple-400">
-              <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_6px_rgba(192,132,252,0.8)]" />
-              Reward Points
-            </span>
+          {/* Range Tabs */}
+          <div className="cosmic-tab-container">
+            <button
+              type="button"
+              onClick={() => setRange(4)}
+              className={range === 4 ? "cosmic-tab-active !py-1 !px-2 text-[11px]" : "cosmic-tab !py-1 !px-2 text-[11px]"}
+            >
+              4W
+            </button>
+            <button
+              type="button"
+              onClick={() => setRange(8)}
+              className={range === 8 ? "cosmic-tab-active !py-1 !px-2 text-[11px]" : "cosmic-tab !py-1 !px-2 text-[11px]"}
+            >
+              8W
+            </button>
+            <button
+              type="button"
+              onClick={() => setRange(12)}
+              className={range === 12 ? "cosmic-tab-active !py-1 !px-2 text-[11px]" : "cosmic-tab !py-1 !px-2 text-[11px]"}
+            >
+              12W
+            </button>
           </div>
 
-          {/* Period Range Buttons */}
-          <div className="flex items-center gap-1 bg-background/50 dark:bg-white/[0.04] p-1 rounded-xl border border-border/60 text-xs">
-            {([4, 8, 12] as const).map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRange(r)}
-                className={`px-2.5 py-0.5 rounded-lg text-xs font-semibold transition-all ${
-                  range === r
-                    ? "bg-primary text-primary-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {r}W
-              </button>
-            ))}
+          {/* Arrow Buttons */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setRange((prev) => (prev === 4 ? 8 : prev === 8 ? 12 : 4))}
+              className="h-6 w-6 rounded-lg bg-muted/60 dark:bg-white/[0.06] border border-border/80 dark:border-white/10 flex items-center justify-center text-xs text-muted-foreground dark:text-slate-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/[0.12] transition-colors"
+              aria-label="Previous period"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={() => setRange((prev) => (prev === 12 ? 8 : prev === 8 ? 4 : 12))}
+              className="h-6 w-6 rounded-lg bg-muted/60 dark:bg-white/[0.06] border border-border/80 dark:border-white/10 flex items-center justify-center text-xs text-muted-foreground dark:text-slate-300 hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/[0.12] transition-colors"
+              aria-label="Next period"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-3 text-xs font-medium">
+            <span className="flex items-center gap-1.5 text-cyan-500 dark:text-cyan-400">
+              <span className="h-2 w-2 rounded-full bg-cyan-500 dark:bg-cyan-400 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
+              Activity Points
+            </span>
+            <span className="flex items-center gap-1.5 text-purple-500 dark:text-purple-400">
+              <span className="h-2 w-2 rounded-full bg-purple-500 dark:bg-purple-400 shadow-[0_0_6px_rgba(192,132,252,0.8)]" />
+              Reward Points
+            </span>
           </div>
         </div>
       </div>
@@ -154,7 +120,7 @@ export function FuturisticTrendsChart({
       {/* Main Chart Canvas with Floating "This Week" Stats Card */}
       <div className="relative mt-4">
         {/* Floating "This Week" Stats Pill (from reference image) */}
-        <div className="absolute right-3 top-2 z-10 hidden sm:flex flex-col rounded-2xl border border-white/10 bg-[#0c1428]/80 p-3 shadow-glass backdrop-blur-xl space-y-1.5 select-none">
+        <div className="absolute right-3 top-2 z-10 hidden sm:flex flex-col rounded-2xl border border-border/80 dark:border-white/10 bg-card/85 dark:bg-[#0c1428]/80 p-3 shadow-glass backdrop-blur-xl space-y-1.5 select-none">
           <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
             This Week
           </span>
@@ -174,11 +140,21 @@ export function FuturisticTrendsChart({
           </div>
         </div>
 
-        {/* Recharts Canvas */}
+        {/* Recharts Canvas / Empty State */}
         <div className="h-[280px] w-full pt-2">
           {!isMounted ? (
             <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
               Loading visualization...
+            </div>
+          ) : !hasData ? (
+            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-2.5">
+              <div className="h-10 w-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <Zap className="h-5 w-5" />
+              </div>
+              <p className="text-sm font-semibold text-foreground">No Weekly Trends Yet</p>
+              <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
+                Team performance trends and weekly trajectory analytics will appear here once weekly reports are finalized.
+              </p>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
@@ -226,7 +202,7 @@ export function FuturisticTrendsChart({
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="rounded-2xl border border-white/10 bg-[#0c1428]/95 p-3 shadow-glass text-xs space-y-1.5 min-w-[150px] backdrop-blur-xl">
+                        <div className="rounded-2xl border border-border/70 dark:border-white/10 bg-card/95 dark:bg-[#0c1428]/95 p-3 shadow-glass text-xs space-y-1.5 min-w-[150px] backdrop-blur-xl">
                           <p className="font-semibold text-foreground">{label}</p>
                           {payload.map((entry: any) => (
                             <div
@@ -284,6 +260,6 @@ export function FuturisticTrendsChart({
           )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

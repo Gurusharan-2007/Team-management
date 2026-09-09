@@ -146,26 +146,18 @@ export function NotificationCenter({
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {/* Filter Toggle: ALL vs UNREAD */}
-            <div className="flex items-center gap-1 bg-muted p-1 rounded-lg border">
+            <div className="cosmic-tab-container">
               <button
                 type="button"
                 onClick={() => setFilter("all")}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
-                  filter === "all"
-                    ? "bg-background text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={filter === "all" ? "cosmic-tab-active" : "cosmic-tab"}
               >
                 All ({notifications.length})
               </button>
               <button
                 type="button"
                 onClick={() => setFilter("unread")}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
-                  filter === "unread"
-                    ? "bg-background text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={filter === "unread" ? "cosmic-tab-active" : "cosmic-tab"}
               >
                 Unread ({unreadCount})
               </button>

@@ -92,14 +92,14 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
     return {
       user: {
         id: "local-dev-user-id",
-        email: "captain@college.edu",
-        user_metadata: { full_name: "Alex Captain" },
+        email: "gurusharan@college.edu",
+        user_metadata: { full_name: "Gurusharan G" },
         created_at: new Date().toISOString(),
       },
       profile: {
         id: "local-dev-user-id",
-        full_name: "Alex Captain",
-        email: "captain@college.edu",
+        full_name: "Gurusharan G",
+        email: "gurusharan@college.edu",
         role: "captain",
         status: "active",
         activity_points: 0,
@@ -120,6 +120,31 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
     } = await supabase.auth.getUser();
 
     if (!user) {
+      if (process.env.NODE_ENV !== "production") {
+        return {
+          user: {
+            id: "local-dev-user-id",
+            email: "gurusharan@college.edu",
+            user_metadata: { full_name: "Gurusharan G" },
+            created_at: new Date().toISOString(),
+          },
+          profile: {
+            id: "local-dev-user-id",
+            full_name: "Gurusharan G",
+            email: "gurusharan@college.edu",
+            role: "captain",
+            status: "active",
+            activity_points: 0,
+            reward_points: 0,
+            avatar_url: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          role: "captain",
+          isConfigured: true,
+        };
+      }
+
       return {
         user: null,
         profile: null,
