@@ -22,9 +22,15 @@ function LoginForm() {
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   const [errorMsg, setErrorMsg] = React.useState<string | null>(urlError);
   const [loading, setLoading] = React.useState(false);
+  const isSubmittingRef = React.useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSubmittingRef.current || loading) {
+      return;
+    }
+
     setFieldErrors({});
     setErrorMsg(null);
 
@@ -41,6 +47,7 @@ function LoginForm() {
       return;
     }
 
+    isSubmittingRef.current = true;
     setLoading(true);
 
     if (!isSupabaseConfigured()) {
@@ -48,6 +55,7 @@ function LoginForm() {
       setTimeout(() => {
         router.push(redirectTo);
         setLoading(false);
+        isSubmittingRef.current = false;
       }, 500);
       return;
     }
@@ -61,7 +69,6 @@ function LoginForm() {
 
       if (error) {
         setErrorMsg(error.message);
-        setLoading(false);
         return;
       }
 
@@ -69,6 +76,8 @@ function LoginForm() {
       router.refresh();
     } catch {
       setErrorMsg("An unexpected error occurred during sign in.");
+    } finally {
+      isSubmittingRef.current = false;
       setLoading(false);
     }
   };
@@ -96,52 +105,54 @@ function LoginForm() {
             </div>
           )}
 
-          <div className="space-y-1.5">
-            <label
-              htmlFor="email"
-              className="text-xs font-semibold text-foreground"
-            >
-              Email address
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="member@team.internal"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={Boolean(fieldErrors.email)}
-              autoComplete="email"
-              maxLength={254}
-              required
-            />
-            {fieldErrors.email && (
-              <p className="text-[11px] text-destructive">{fieldErrors.email}</p>
-            )}
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
+          <fieldset disabled={loading} className="space-y-4 p-0 m-0 border-0">
+            <div className="space-y-1.5">
               <label
-                htmlFor="password"
-                className="text-xs font-medium text-foreground"
+                htmlFor="email"
+                className="text-xs font-semibold text-foreground"
               >
-                Password
+                Email address
               </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="member@team.internal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={Boolean(fieldErrors.email)}
+                autoComplete="email"
+                maxLength={254}
+                required
+              />
+              {fieldErrors.email && (
+                <p className="text-[11px] text-destructive">{fieldErrors.email}</p>
+              )}
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={Boolean(fieldErrors.password)}
-              autoComplete="current-password"
-              required
-            />
-            {fieldErrors.password && (
-              <p className="text-[11px] text-destructive">{fieldErrors.password}</p>
-            )}
-          </div>
+
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="text-xs font-medium text-foreground"
+                >
+                  Password
+                </label>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={Boolean(fieldErrors.password)}
+                autoComplete="current-password"
+                required
+              />
+              {fieldErrors.password && (
+                <p className="text-[11px] text-destructive">{fieldErrors.password}</p>
+              )}
+            </div>
+          </fieldset>
         </CardContent>
 
         <CardFooter className="flex flex-col space-y-3 pt-2">
