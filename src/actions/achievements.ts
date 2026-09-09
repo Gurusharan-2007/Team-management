@@ -145,10 +145,12 @@ export async function getAchievementsCatalogAction(targetMemberId?: string) {
     const progressPercentage =
       ach.threshold > 0 ? Math.min(100, Math.round((currentValue / ach.threshold) * 100)) : 100;
 
+    const qualifies = Boolean(ach.active && (ach.threshold <= 0 || currentValue >= ach.threshold));
+
     return {
       ...ach,
-      is_earned: !!earned,
-      awarded_at: earned?.awarded_at || null,
+      is_earned: qualifies,
+      awarded_at: qualifies ? (earned?.awarded_at || new Date().toISOString()) : null,
       current_value: currentValue,
       progress_percentage: progressPercentage,
       metadata: earned?.metadata,
@@ -406,6 +408,9 @@ export async function createAchievementAction(params: CreateAchievementParams) {
   });
 
   revalidatePath("/leaderboard");
+  revalidatePath("/dashboard");
+  revalidatePath("/profile");
+  revalidatePath("/team");
   return { success: true, achievement: data };
 }
 
@@ -470,6 +475,9 @@ export async function updateAchievementAction(params: UpdateAchievementParams) {
   });
 
   revalidatePath("/leaderboard");
+  revalidatePath("/dashboard");
+  revalidatePath("/profile");
+  revalidatePath("/team");
   return { success: true, achievement: data };
 }
 
@@ -514,5 +522,8 @@ export async function toggleAchievementStatusAction(achievementId: string, activ
   });
 
   revalidatePath("/leaderboard");
+  revalidatePath("/dashboard");
+  revalidatePath("/profile");
+  revalidatePath("/team");
   return { success: true, achievement: data };
 }

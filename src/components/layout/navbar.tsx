@@ -24,6 +24,7 @@ interface NavbarProps {
   userName?: string;
   userEmail?: string;
   userRole?: UserRole;
+  userAvatar?: string | null;
   unreadNotificationsCount?: number;
 }
 
@@ -31,6 +32,7 @@ export function Navbar({
   userName = "Gurusharan G",
   userEmail = "member@team.internal",
   userRole = "captain",
+  userAvatar = null,
   unreadNotificationsCount = 3,
 }: NavbarProps) {
   const pathname = usePathname();
@@ -129,6 +131,7 @@ export function Navbar({
             title="My Profile"
           >
             <Avatar className="h-7.5 w-7.5 rounded-full border border-border/60 dark:border-white/25">
+              {userAvatar && <AvatarImage src={userAvatar} alt={userName} />}
               <AvatarFallback className="text-[11px] font-bold bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 text-white">
                 {getInitials(userName)}
               </AvatarFallback>

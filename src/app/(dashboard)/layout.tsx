@@ -17,6 +17,7 @@ export default async function DashboardLayout({
   const userEmail = currentUser.user?.email || "member@college.edu";
   const userName = currentUser.profile?.full_name || "Team Member";
   const userRole = currentUser.role;
+  const userAvatar = currentUser.profile?.avatar_url;
   const unreadCount = await getUnreadNotificationCountAction();
 
   return (
@@ -45,6 +46,7 @@ export default async function DashboardLayout({
             userName={userName}
             userEmail={userEmail}
             userRole={userRole}
+            userAvatar={userAvatar}
             unreadNotificationsCount={unreadCount}
           />
           <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-[1440px] w-full mx-auto animate-fade-in flex flex-col justify-between">

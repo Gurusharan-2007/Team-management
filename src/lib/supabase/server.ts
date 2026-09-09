@@ -88,23 +88,27 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
       };
     }
 
+    const cookieStore = cookies();
+    const devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
+    const devName = cookieStore.get("dev_full_name")?.value || null;
+
     // Local preview fallback mock (development / non-production only)
     return {
       user: {
         id: "local-dev-user-id",
         email: "gurusharan@college.edu",
-        user_metadata: { full_name: "Gurusharan G" },
+        user_metadata: { full_name: devName || "Gurusharan G" },
         created_at: new Date().toISOString(),
       },
       profile: {
         id: "local-dev-user-id",
-        full_name: "Gurusharan G",
+        full_name: devName || "Gurusharan G",
         email: "gurusharan@college.edu",
         role: "captain",
         status: "active",
         activity_points: 0,
         reward_points: 0,
-        avatar_url: null,
+        avatar_url: devAvatar,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
@@ -114,6 +118,10 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
   }
 
   try {
+    const cookieStore = cookies();
+    const devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
+    const devName = cookieStore.get("dev_full_name")?.value || null;
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -125,18 +133,18 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
           user: {
             id: "local-dev-user-id",
             email: "gurusharan@college.edu",
-            user_metadata: { full_name: "Gurusharan G" },
+            user_metadata: { full_name: devName || "Gurusharan G" },
             created_at: new Date().toISOString(),
           },
           profile: {
             id: "local-dev-user-id",
-            full_name: "Gurusharan G",
+            full_name: devName || "Gurusharan G",
             email: "gurusharan@college.edu",
             role: "captain",
             status: "active",
             activity_points: 0,
             reward_points: 0,
-            avatar_url: null,
+            avatar_url: devAvatar,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           },
@@ -160,6 +168,9 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
       .maybeSingle();
 
     const profileData = profile as Profile | null;
+    if (profileData && devAvatar && !profileData.avatar_url) {
+      profileData.avatar_url = devAvatar;
+    }
     const role = (profileData?.role as UserRole) || "member";
 
     return {

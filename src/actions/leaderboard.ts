@@ -47,10 +47,9 @@ export async function getLeaderboardAction(params: GetLeaderboardParams = {}) {
 
   const memberIds = profiles.map((p) => p.id);
 
-  // 2. Fetch completed courses count per member
+  // 2. Fetch completed courses count per member (table schema has no status column, row presence indicates completion)
   const { data: courseData } = await (supabase.from("member_courses") as any)
     .select("member_id")
-    .eq("status", "completed")
     .in("member_id", memberIds);
 
   const coursesCountMap = new Map<string, number>();
@@ -71,18 +70,46 @@ export async function getLeaderboardAction(params: GetLeaderboardParams = {}) {
     }
   }
 
-  // 4. Fetch earned achievements and count per member
-  const { data: memberAchData } = await (supabase.from("member_achievements") as any)
-    .select("member_id, achievements(*)")
-    .in("member_id", memberIds);
+  // 4. Fetch active achievement definitions for dynamic qualification evaluation
+  const { data: activeAchsData } = await (supabase.from("achievements") as any)
+    .select("*")
+    .eq("active", true)
+    .order("threshold", { ascending: true });
 
+  const activeCatalog: any[] = activeAchsData || [];
+
+  // Build dynamic achievementsMap based on CURRENT requirement thresholds and CURRENT user metrics
   const achievementsMap = new Map<string, any[]>();
-  for (const item of memberAchData || []) {
-    if (item.achievements) {
-      const list = achievementsMap.get(item.member_id) || [];
-      list.push(item.achievements);
-      achievementsMap.set(item.member_id, list);
+  for (const p of profiles) {
+    const actPts = p.activity_points || 0;
+    const rewPts = p.reward_points || 0;
+    const cCount = coursesCountMap.get(p.id) || 0;
+    const gCount = goalsCountMap.get(p.id) || 0;
+
+    const qualifying: any[] = [];
+    for (const ach of activeCatalog) {
+      let metric = 0;
+      switch (ach.achievement_type) {
+        case "activity_points":
+          metric = actPts;
+          break;
+        case "reward_points":
+          metric = rewPts;
+          break;
+        case "courses_completed":
+          metric = cCount;
+          break;
+        case "goal_completed":
+          metric = gCount;
+          break;
+        default:
+          metric = 0;
+      }
+      if (ach.threshold <= 0 || metric >= ach.threshold) {
+        qualifying.push(ach);
+      }
     }
+    achievementsMap.set(p.id, qualifying);
   }
 
   // 5. Handle Time Periods: All Time vs Current Week vs Previous Week

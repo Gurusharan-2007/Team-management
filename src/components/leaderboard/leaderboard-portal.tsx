@@ -71,7 +71,7 @@ export function LeaderboardPortal({
 
   const refreshCatalog = async () => {
     startTransition(async () => {
-      const res = await getAchievementsCatalogAction();
+      const res = await getAchievementsCatalogAction(currentUserId);
       if (res.success && res.catalog) {
         setCatalog(res.catalog);
       }

@@ -29,9 +29,6 @@ export function FuturisticMetricCards({
       trend: activityGrowthPct !== null && activityGrowthPct !== undefined
         ? `↑ ${Math.abs(activityGrowthPct)}%`
         : "Active",
-      trendLabel: activityGrowthPct !== null && activityGrowthPct !== undefined
-        ? "vs last week"
-        : "current cycle",
       icon: Zap,
       accentColor: "emerald",
       badgeBg: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
@@ -47,9 +44,6 @@ export function FuturisticMetricCards({
       trend: rewardGrowthPct !== null && rewardGrowthPct !== undefined
         ? `↑ ${Math.abs(rewardGrowthPct)}%`
         : "Active",
-      trendLabel: rewardGrowthPct !== null && rewardGrowthPct !== undefined
-        ? "vs last week"
-        : "current cycle",
       icon: Award,
       accentColor: "purple",
       badgeBg: "bg-purple-500/15 text-purple-400 border-purple-500/30",
@@ -63,7 +57,6 @@ export function FuturisticMetricCards({
       title: "Technical Courses",
       value: String(coursesCompleted),
       trend: `${coursesCompleted > 0 ? `↑ ${coursesCompleted}` : "Active"}`,
-      trendLabel: "vs last month",
       icon: BookOpen,
       accentColor: "blue",
       badgeBg: "bg-sky-500/15 text-sky-400 border-sky-500/30",
@@ -77,7 +70,6 @@ export function FuturisticMetricCards({
       title: "Current Rank",
       value: currentRank ? `#${currentRank}` : "—",
       trend: currentRank ? "↑ 1" : "Active",
-      trendLabel: "from last week",
       icon: Trophy,
       accentColor: "amber",
       badgeBg: "bg-amber-500/15 text-amber-400 border-amber-500/30",
@@ -129,9 +121,6 @@ export function FuturisticMetricCards({
                 <div className="mt-1 flex items-center gap-1.5 text-xs">
                   <span className={`font-bold ${card.trendColor}`}>
                     {card.trend}
-                  </span>
-                  <span className="text-[11px] text-muted-foreground font-normal">
-                    {card.trendLabel}
                   </span>
                 </div>
               </div>
