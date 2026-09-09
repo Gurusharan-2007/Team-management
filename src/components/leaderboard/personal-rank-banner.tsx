@@ -25,11 +25,12 @@ export function PersonalRankBanner({ rankSummary, userName }: PersonalRankBanner
   } = rankSummary;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="rounded-2xl border border-border/60 glass-panel p-5 sm:p-6 shadow-glass relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-64 h-32 bg-amber-500/5 blur-3xl pointer-events-none" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
         {/* Left: Overall rank hero */}
         <div className="flex items-center gap-3.5">
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shadow-sm">
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/25 shadow-glow-amber">
             <Trophy className="w-6 h-6" />
           </div>
           <div>

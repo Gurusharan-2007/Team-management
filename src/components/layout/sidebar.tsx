@@ -3,26 +3,26 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import {
   LayoutDashboard,
   Users,
-  FileText,
   Trophy,
+  FileText,
   Bell,
-  User,
+  Activity,
   Settings,
+  Sun,
+  Moon,
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Shield,
-  Activity,
-  Sliders,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { RoleBadge } from "@/components/ui/role-badge";
 import { type UserRole } from "@/types/domain";
-import { isLeadership, canViewActivityTimeline } from "@/lib/auth/permissions";
+import { isLeadership } from "@/lib/auth/permissions";
 
 interface SidebarProps {
   userRole?: UserRole;
@@ -33,13 +33,6 @@ interface SidebarProps {
   onToggleCollapse?: () => void;
   className?: string;
   onNavClick?: () => void;
-}
-
-interface NavItemConfig {
-  title: string;
-  href: string;
-  icon: React.ElementType;
-  badge?: number;
 }
 
 export function Sidebar({
@@ -53,8 +46,15 @@ export function Sidebar({
   onNavClick,
 }: SidebarProps) {
   const pathname = usePathname();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
   const hasLeadership = isLeadership(userRole);
-  const canSeeTimeline = canViewActivityTimeline(userRole);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && (resolvedTheme === "dark" || theme === "dark");
 
   const handleSignOut = async () => {
     try {
@@ -68,131 +68,58 @@ export function Sidebar({
     }
   };
 
-  // Section 1: Overview (Universal)
-  const overviewItems: NavItemConfig[] = [
+  const navItems = [
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { title: "Team Roster", href: "/team", icon: Users },
-    { title: "Weekly Reports", href: "/reports", icon: FileText },
+    { title: "Team", href: "/team", icon: Users },
     { title: "Leaderboard", href: "/leaderboard", icon: Trophy },
-  ];
-
-  // Section 2: Personal (Universal)
-  const personalItems: NavItemConfig[] = [
-    { title: "My Profile", href: "/profile", icon: User },
+    { title: "Reports", href: "/reports", icon: FileText },
     {
       title: "Notifications",
       href: "/notifications",
       icon: Bell,
       badge: unreadNotificationsCount,
     },
-    ...(!hasLeadership
-      ? [{ title: "Settings", href: "/settings", icon: Settings }]
-      : []),
+    { title: "Activity", href: "/activity", icon: Activity },
+    { title: "Settings", href: "/settings", icon: Settings },
   ];
-
-  // Section 3: Leadership (Captain, Vice Captain, Manager, Strategist)
-  const leadershipItems: NavItemConfig[] = [];
-  if (canSeeTimeline) {
-    leadershipItems.push({
-      title: "Team Activity",
-      href: "/activity",
-      icon: Activity,
-    });
-  }
-  if (hasLeadership) {
-    leadershipItems.push({
-      title: "Admin Settings",
-      href: "/settings",
-      icon: Sliders,
-    });
-  }
-
-  const renderNavGroup = (label: string, items: NavItemConfig[]) => {
-    if (items.length === 0) return null;
-
-    return (
-      <div className="space-y-1 pt-2 first:pt-0">
-        {!isCollapsed && (
-          <div className="px-2.5 pb-1 flex items-center justify-between">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-              {label}
-            </span>
-          </div>
-        )}
-        {items.map((item) => {
-          const isExact = pathname === item.href;
-          const isNested = item.href !== "/dashboard" && pathname.startsWith(item.href);
-          const isActive = isExact || isNested;
-          const Icon = item.icon;
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavClick}
-              title={isCollapsed ? item.title : undefined}
-              className={cn(
-                "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium transition-all select-none",
-                isActive
-                  ? "bg-primary/10 text-primary font-semibold shadow-xs"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-              )}
-            >
-              <Icon
-                className={cn(
-                  "h-4 w-4 shrink-0 transition-colors",
-                  isActive
-                    ? "text-primary"
-                    : "text-muted-foreground group-hover:text-foreground"
-                )}
-              />
-              {!isCollapsed && <span className="truncate">{item.title}</span>}
-
-              {!isCollapsed && item.badge !== undefined && item.badge > 0 ? (
-                <span className="ml-auto flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">
-                  {item.badge > 9 ? "9+" : item.badge}
-                </span>
-              ) : (
-                !isCollapsed && isActive && (
-                  <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
-                )
-              )}
-            </Link>
-          );
-        })}
-      </div>
-    );
-  };
 
   return (
     <aside
       className={cn(
-        "relative flex h-full flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-[64px]" : "w-[240px]",
+        "relative flex h-full flex-col border-r border-border/60 bg-sidebar/85 backdrop-blur-2xl text-sidebar-foreground transition-all duration-300 ease-in-out select-none",
+        isCollapsed ? "w-[68px]" : "w-[245px]",
         className
       )}
     >
-      {/* Workspace Brand Header */}
-      <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-3.5">
+      {/* Brand Header */}
+      <div className="flex h-16 items-center justify-between border-b border-border/40 px-4">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2.5 overflow-hidden font-semibold text-foreground tracking-tight"
+          className="flex items-center gap-3 overflow-hidden font-semibold tracking-tight group"
           onClick={onNavClick}
         >
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shadow-xs">
-            TP
+          {/* Glowing 4-Point Cosmic Star Logo */}
+          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 shadow-[0_0_15px_rgba(56,189,248,0.5)] transition-transform duration-200 group-hover:scale-105">
+            <svg
+              className="h-4.5 w-4.5 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+            </svg>
           </div>
           {!isCollapsed && (
             <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-xs font-bold tracking-tight text-foreground">
+              <span className="truncate text-sm font-bold tracking-tight text-foreground">
                 Team Portal
               </span>
-              <span className="truncate text-[10px] text-muted-foreground font-medium">
+              <span className="truncate text-[10px] text-muted-foreground/80 font-medium">
                 Operations &amp; Analytics
               </span>
             </div>
           )}
         </Link>
+
         {onToggleCollapse && !isCollapsed && (
           <Button
             variant="ghost"
@@ -206,60 +133,132 @@ export function Sidebar({
         )}
       </div>
 
-      {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
-        {renderNavGroup("Overview", overviewItems)}
-        {renderNavGroup("Personal", personalItems)}
-        {leadershipItems.length > 0 && renderNavGroup("Leadership", leadershipItems)}
+      {/* Main Navigation List */}
+      <div className="flex-1 overflow-y-auto px-2.5 py-4 space-y-1.5">
+        {navItems.map((item) => {
+          const isExact = pathname === item.href;
+          const isNested = item.href !== "/dashboard" && pathname.startsWith(item.href);
+          const isActive = isExact || isNested;
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onNavClick}
+              title={isCollapsed ? item.title : undefined}
+              className={cn(
+                "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all duration-200",
+                isActive
+                  ? "bg-gradient-to-r from-blue-600/25 via-indigo-600/20 to-blue-500/10 border border-blue-400/40 text-foreground font-semibold shadow-[0_0_15px_rgba(59,130,246,0.25)] dark:text-white"
+                  : "text-muted-foreground hover:bg-white/[0.05] hover:text-foreground"
+              )}
+            >
+              <Icon
+                className={cn(
+                  "h-4 w-4 shrink-0 transition-colors",
+                  isActive ? "text-cyan-400" : "text-muted-foreground group-hover:text-foreground"
+                )}
+              />
+              {!isCollapsed && <span className="truncate">{item.title}</span>}
+
+              {/* Notification Badge */}
+              {!isCollapsed && item.badge !== undefined && item.badge > 0 ? (
+                <span className="ml-auto flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white shadow-xs">
+                  {item.badge > 9 ? "9+" : item.badge}
+                </span>
+              ) : null}
+
+              {/* Active Indicator Bar */}
+              {!isCollapsed && isActive && (
+                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
+              )}
+            </Link>
+          );
+        })}
       </div>
 
-      {/* Role and User Footer */}
-      <div className="border-t border-sidebar-border p-2 space-y-2">
+      {/* Bottom Area: Motivation Card + Dark Mode + Profile/Signout */}
+      <div className="border-t border-border/40 p-3 space-y-3">
+        {/* Motivational Card (from reference image) */}
         {!isCollapsed && (
-          <div className="rounded-xl border border-sidebar-border bg-card/60 p-2.5 space-y-1.5 shadow-xs">
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider">
-                Assigned Role
-              </span>
-              <RoleBadge role={userRole} size="sm" />
-            </div>
-            <div className="truncate text-xs font-medium text-foreground">
-              {userName}
-            </div>
-            {userEmail && (
-              <div className="truncate text-[10px] text-muted-foreground font-mono">
-                {userEmail}
+          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-blue-950/40 via-indigo-950/30 to-purple-950/20 p-3 shadow-glass backdrop-blur-md">
+            <div className="space-y-1">
+              <p className="text-[11px] font-medium text-muted-foreground leading-snug">
+                &ldquo;Great teams build great things&rdquo;
+              </p>
+              {/* Mini glowing sparkline curve */}
+              <div className="pt-1.5">
+                <svg className="w-full h-5 text-cyan-400/80" viewBox="0 0 100 24" fill="none">
+                  <path
+                    d="M0 18 Q 20 6, 40 14 T 70 8 T 100 4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_6px_rgba(56,189,248,0.6)]"
+                  />
+                  <circle cx="100" cy="4" r="2.5" fill="#38bdf8" />
+                </svg>
               </div>
-            )}
+            </div>
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-1">
-          {onToggleCollapse && isCollapsed && (
+        {/* Dark Mode Switch (from reference image) */}
+        {!isCollapsed && mounted && (
+          <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/40 px-3 py-2 text-xs backdrop-blur-sm">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              {isDark ? <Moon className="h-3.5 w-3.5 text-indigo-400" /> : <Sun className="h-3.5 w-3.5 text-amber-500" />}
+              <span className="text-[11px] font-medium text-foreground/80">Dark Mode</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className={cn(
+                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
+                isDark ? "bg-primary" : "bg-muted"
+              )}
+              aria-label="Toggle dark mode"
+            >
+              <span
+                className={cn(
+                  "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out",
+                  isDark ? "translate-x-4" : "translate-x-0"
+                )}
+              />
+            </button>
+          </div>
+        )}
+
+        {/* User Info & Signout */}
+        <div className="flex items-center justify-between gap-1 pt-1">
+          {!isCollapsed ? (
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2 overflow-hidden">
+                <RoleBadge role={userRole} size="sm" />
+                <span className="truncate text-xs text-muted-foreground">{userName}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSignOut}
+                className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                title="Sign out"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ) : (
             <Button
               variant="ghost"
               size="icon"
-              onClick={onToggleCollapse}
-              className="h-8 w-8 text-muted-foreground hover:text-foreground"
-              aria-label="Expand sidebar"
+              onClick={handleSignOut}
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 mx-auto"
+              title="Sign out"
             >
-              <ChevronRight className="h-4 w-4" />
+              <LogOut className="h-4 w-4" />
             </Button>
           )}
-
-          <Button
-            variant="ghost"
-            size={isCollapsed ? "icon" : "sm"}
-            onClick={handleSignOut}
-            className={cn(
-              "text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors",
-              isCollapsed ? "h-8 w-8" : "w-full justify-start text-xs h-8"
-            )}
-            aria-label="Sign out"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            {!isCollapsed && <span className="ml-2">Sign out</span>}
-          </Button>
         </div>
       </div>
     </aside>

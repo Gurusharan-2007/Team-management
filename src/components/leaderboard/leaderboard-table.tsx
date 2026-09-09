@@ -172,7 +172,7 @@ export function LeaderboardTable({
       </div>
 
       {/* Leaderboard Table */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+      <div className="rounded-2xl border border-border/60 glass-panel overflow-hidden shadow-glass">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/40 text-xs font-semibold text-muted-foreground uppercase border-b border-border">

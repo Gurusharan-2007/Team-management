@@ -359,12 +359,12 @@ export function TeamDirectory({
           className="py-12"
         />
       ) : (
-        <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs">
+        <div className="rounded-2xl border border-border/60 glass-panel overflow-hidden shadow-glass">
           {/* Desktop & Tablet Table */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-border bg-muted/30">
+                <tr className="border-b border-border/60 bg-muted/40 backdrop-blur-xs">
                   <th className="py-3 px-4">
                     {renderSortHeader("Member", "name", "left")}
                   </th>

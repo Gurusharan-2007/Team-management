@@ -94,17 +94,17 @@ export function MemberDashboardView({
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* My Activity Points */}
-          <Card className="hover:border-amber-500/30 transition-all duration-200">
+          <Card className="glass-card hover:border-amber-500/40 rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 My Activity Points
               </CardTitle>
-              <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500 dark:bg-amber-500/20">
+              <div className="p-1.5 rounded-xl bg-amber-500/10 text-amber-500 dark:bg-amber-500/20 border border-amber-500/20">
                 <Zap className="h-4 w-4" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tracking-tight font-mono text-foreground">
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-foreground">
                 {formatPoints(member.activity_points || 0)}
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -124,17 +124,17 @@ export function MemberDashboardView({
           </Card>
 
           {/* My Reward Points */}
-          <Card className="hover:border-purple-500/30 transition-all duration-200">
+          <Card className="glass-card hover:border-purple-500/40 rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 My Reward Points
               </CardTitle>
-              <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-500 dark:bg-purple-500/20">
+              <div className="p-1.5 rounded-xl bg-purple-500/10 text-purple-500 dark:bg-purple-500/20 border border-purple-500/20">
                 <Award className="h-4 w-4" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tracking-tight font-mono text-foreground">
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-foreground">
                 {formatPoints(member.reward_points || 0)}
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -154,17 +154,17 @@ export function MemberDashboardView({
           </Card>
 
           {/* My Completed Courses */}
-          <Card className="hover:border-blue-500/30 transition-all duration-200">
+          <Card className="glass-card hover:border-blue-500/40 rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Completed Courses
               </CardTitle>
-              <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 dark:bg-blue-500/20">
+              <div className="p-1.5 rounded-xl bg-blue-500/10 text-blue-500 dark:bg-blue-500/20 border border-blue-500/20">
                 <BookOpen className="h-4 w-4" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tracking-tight font-mono text-foreground">
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-foreground">
                 {completedCoursesCount}
               </div>
               <p className="mt-1 text-xs text-muted-foreground">

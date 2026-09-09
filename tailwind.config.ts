@@ -91,6 +91,10 @@ const config: Config = {
         md: "0 4px 12px -2px rgb(0 0 0 / 0.06), 0 2px 6px -2px rgb(0 0 0 / 0.04)",
         lg: "0 10px 25px -3px rgb(0 0 0 / 0.08), 0 4px 10px -4px rgb(0 0 0 / 0.04)",
         glow: "0 0 20px -3px hsl(var(--primary) / 0.25)",
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.12)",
+        "glass-hover": "0 14px 40px -5px rgba(0, 0, 0, 0.25)",
+        "glow-cyan": "0 0 25px -4px rgba(56, 189, 248, 0.35)",
+        "glow-purple": "0 0 25px -4px rgba(192, 132, 252, 0.35)",
       },
       keyframes: {
         "fade-in": {
@@ -101,10 +105,20 @@ const config: Config = {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-4px)" },
+        },
+        pulse_subtle: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.8" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         "slide-in-right": "slide-in-right 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        float: "float 4s ease-in-out infinite",
+        "pulse-subtle": "pulse_subtle 3s ease-in-out infinite",
       },
     },
   },
