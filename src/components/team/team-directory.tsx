@@ -16,9 +16,10 @@ import {
   UserX,
   X,
   Zap,
+  Trash2,
 } from "lucide-react";
 import { MemberListItem, UserRole, UserStatus, ALL_ROLES, ROLE_LABELS } from "@/types/domain";
-import { isLeadership } from "@/lib/auth/permissions";
+import { isLeadership, isCaptain } from "@/lib/auth/permissions";
 import { RoleBadge } from "@/components/ui/role-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ import {
   updateMemberRoleAction,
   toggleMemberStatusAction,
   updateMemberInfoAction,
+  deleteMemberAction,
 } from "@/actions/members";
 import { getInitials, formatPoints, cn } from "@/lib/utils";
 
@@ -87,7 +89,13 @@ export function TeamDirectory({
   const [confirmTarget, setConfirmTarget] = React.useState<MemberListItem | null>(null);
   const [confirmNextStatus, setConfirmNextStatus] = React.useState<UserStatus | null>(null);
 
+  // Member deletion confirmation modal (Captain only)
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [memberToDelete, setMemberToDelete] = React.useState<MemberListItem | null>(null);
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
+
   const canManage = isLeadership(currentUserRole);
+  const canDelete = isCaptain(currentUserRole);
 
   // Sync state if initialMembers changes
   React.useEffect(() => {
@@ -225,6 +233,47 @@ export function TeamDirectory({
         type: "error",
         text: result.error || "Failed to change member status.",
       });
+    }
+  };
+
+  const handleDeleteClick = (member: MemberListItem) => {
+    if (!canDelete || member.id === currentUserId) return;
+    setActionMessage(null);
+    setMemberToDelete(member);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!memberToDelete) return;
+    setDeleteLoading(true);
+    try {
+      const result = await deleteMemberAction({
+        targetUserId: memberToDelete.id,
+      });
+
+      if (result.success) {
+        setMembers((prev) => prev.filter((m) => m.id !== memberToDelete.id));
+        setDeleteDialogOpen(false);
+        setActionMessage({
+          type: "success",
+          text: `Member "${memberToDelete.full_name}" has been removed from the team.`,
+        });
+        setMemberToDelete(null);
+      } else {
+        setDeleteDialogOpen(false);
+        setActionMessage({
+          type: "error",
+          text: result.error || "Failed to remove member.",
+        });
+      }
+    } catch {
+      setDeleteDialogOpen(false);
+      setActionMessage({
+        type: "error",
+        text: "An unexpected error occurred while removing the member.",
+      });
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -509,6 +558,17 @@ export function TeamDirectory({
                                 <UserCheck className="h-3.5 w-3.5" />
                               )}
                             </Button>
+                            {canDelete && member.id !== currentUserId && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleDeleteClick(member)}
+                                className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                                title={`Remove ${member.full_name}`}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
                           </>
                         )}
                       </div>
@@ -630,6 +690,17 @@ export function TeamDirectory({
                             <UserCheck className="h-3.5 w-3.5" />
                           )}
                         </Button>
+                        {canDelete && member.id !== currentUserId && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(member)}
+                            className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                            title={`Remove ${member.full_name}`}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
                       </>
                     )}
                   </div>
@@ -800,6 +871,23 @@ export function TeamDirectory({
         isDestructive={confirmNextStatus === "inactive"}
         isLoading={actionLoading}
         onConfirm={handleConfirmToggleStatus}
+      />
+
+      {/* Confirmation Dialog for Permanent Member Removal (Captain only) */}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Remove Team Member"
+        description={
+          memberToDelete
+            ? `Are you sure you want to permanently remove ${memberToDelete.full_name} (${memberToDelete.email}) from the team? This action cannot be undone and will delete their membership from the workspace.`
+            : "Are you sure you want to remove this member from the team?"
+        }
+        confirmLabel="Remove Member"
+        cancelLabel="Cancel"
+        isDestructive={true}
+        isLoading={deleteLoading}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

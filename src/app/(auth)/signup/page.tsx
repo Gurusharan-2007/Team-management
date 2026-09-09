@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { signupSchema } from "@/lib/validation/auth";
+import { getAuthCallbackUrl } from "@/lib/config/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,9 +28,12 @@ export default function SignupPage() {
     setErrorMsg(null);
     setSuccessMsg(null);
 
+    const cleanedFullName = fullName.trim();
+    const cleanedEmail = email.trim();
+
     const validation = signupSchema.safeParse({
-      fullName,
-      email,
+      fullName: cleanedFullName,
+      email: cleanedEmail,
       password,
       confirmPassword,
     });
@@ -60,19 +64,30 @@ export default function SignupPage() {
       const supabase = createClient();
       // Public signup strictly registers users as 'member'
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: cleanedEmail,
         password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: cleanedFullName,
             role: "member", // strictly non-privileged default
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: getAuthCallbackUrl(),
         },
       });
 
       if (error) {
-        setErrorMsg(error.message);
+        const isRateLimit =
+          error.status === 429 ||
+          (error as any).code === "over_email_send_rate_limit" ||
+          error.message?.toLowerCase().includes("rate limit");
+
+        if (isRateLimit) {
+          setErrorMsg(
+            "Email delivery rate limit reached by the authentication service. Please wait a few minutes before trying again or requesting another verification email."
+          );
+        } else {
+          setErrorMsg(error.message);
+        }
         setLoading(false);
         return;
       }
@@ -151,6 +166,7 @@ export default function SignupPage() {
               onChange={(e) => setEmail(e.target.value)}
               error={Boolean(fieldErrors.email)}
               autoComplete="email"
+              maxLength={254}
               required
             />
             {fieldErrors.email && (

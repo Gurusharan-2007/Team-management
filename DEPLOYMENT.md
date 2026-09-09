@@ -53,6 +53,8 @@ Execute all migrations in chronological order against your production PostgreSQL
    - Milestone definitions, achievement auto-award engine, ranking views.
 8. `supabase/migrations/00008_notifications_settings_and_hardening.sql`
    - `team_settings` table, notification action URLs, and trigger `trg_protect_last_captain` preventing demotion of the final Captain.
+9. `supabase/migrations/00009_captain_delete_member.sql`
+   - Captain member removal permission, RLS policy on profiles, and secure atomic deletion function `delete_member_by_captain`.
 
 ---
 

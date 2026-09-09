@@ -5,6 +5,7 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { UserRole, Profile } from "@/types/domain";
 import {
   canManageMembers,
+  canDeleteMember,
   canManagePoints,
   canManageRoles,
   canViewAllProfiles,
@@ -19,6 +20,7 @@ interface AuthContextType {
   role: UserRole;
   loading: boolean;
   canManageMembers: boolean;
+  canDeleteMember: boolean;
   canManagePoints: boolean;
   canManageRoles: boolean;
   canViewAllProfiles: boolean;
@@ -111,6 +113,7 @@ export function AuthProvider({
     role,
     loading,
     canManageMembers: canManageMembers(role),
+    canDeleteMember: canDeleteMember(role),
     canManagePoints: canManagePoints(role),
     canManageRoles: canManageRoles(role),
     canViewAllProfiles: canViewAllProfiles(role),

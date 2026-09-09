@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { UserRole, UserStatus, ALL_ROLES, Profile } from "@/types/domain";
-import { canManageMembers, canManageRoles } from "@/lib/auth/permissions";
+import { canManageMembers, canManageRoles, canDeleteMember } from "@/lib/auth/permissions";
 
 /**
  * Updates a member's role.
@@ -377,6 +377,136 @@ export async function bootstrapCaptainAction({
 
   revalidatePath("/team");
   revalidatePath("/dashboard");
+
+  return { success: true };
+}
+
+/**
+ * Deletes/removes a team member.
+ * Strictly enforced: Only Captain may invoke this.
+ * Server-side security checks:
+ * 1. Authenticated user must have 'captain' role.
+ * 2. Captain cannot delete themselves (self-delete protection).
+ * 3. Cannot delete the last active captain (last-Captain protection).
+ * 4. Logs audit trail before deletion.
+ * 5. Revalidates paths: /team, /dashboard, /leaderboard, /reports, /profile/[id].
+ */
+export async function deleteMemberAction({
+  targetUserId,
+}: {
+  targetUserId: string;
+}) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser.user || !canDeleteMember(currentUser.role)) {
+    return {
+      success: false,
+      error: "Unauthorized: Only the Captain can delete or remove team members.",
+    };
+  }
+
+  // Safety check 1: Captain cannot delete themselves
+  if (currentUser.user.id === targetUserId) {
+    return {
+      success: false,
+      error: "Operation rejected: You cannot delete your own account.",
+    };
+  }
+
+  // Handle local development preview fallback
+  if (!currentUser.isConfigured) {
+    return {
+      success: true,
+      message: "[Preview Mode] Member removed successfully",
+    };
+  }
+
+  const supabase = await createClient();
+
+  // Retrieve target member details
+  const { data, error: fetchError } = await supabase
+    .from("profiles")
+    .select("role, status, email, full_name")
+    .eq("id", targetUserId)
+    .single();
+
+  const targetProfile = data as {
+    role: UserRole;
+    status: UserStatus;
+    email: string;
+    full_name: string;
+  } | null;
+
+  if (fetchError || !targetProfile) {
+    return { success: false, error: "Target member profile not found." };
+  }
+
+  // Safety check 2: Protect the last active captain from deletion
+  if (targetProfile.role === "captain" && targetProfile.status === "active") {
+    const { count } = await supabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .eq("role", "captain")
+      .eq("status", "active");
+
+    if (count !== null && count <= 1) {
+      return {
+        success: false,
+        error: "Operation rejected: Cannot delete the last active Captain in the organization.",
+      };
+    }
+  }
+
+  // Log to audit trail before deletion
+  try {
+    await (supabase.from("audit_logs") as any).insert({
+      performed_by: currentUser.user.id,
+      affected_user_id: targetUserId,
+      action: "member_deleted",
+      metadata: {
+        deleted_email: targetProfile.email,
+        deleted_name: targetProfile.full_name,
+        deleted_role: targetProfile.role,
+        deleted_by_captain: currentUser.user.id,
+      },
+    });
+  } catch {
+    try {
+      await (supabase.from("audit_logs") as any).insert({
+        performed_by: currentUser.user.id,
+        affected_user_id: targetUserId,
+        action: "member_deactivated",
+        metadata: {
+          note: "member_removed_by_captain",
+          deleted_email: targetProfile.email,
+          deleted_name: targetProfile.full_name,
+        },
+      });
+    } catch {
+      // Non-blocking audit log
+    }
+  }
+
+  // Delete profile from profiles table (foreign keys CASCADE all child records)
+  const { error: deleteError } = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", targetUserId);
+
+  if (deleteError) {
+    const { error: rpcError } = await (supabase as any).rpc("delete_member_by_captain", {
+      target_user_id: targetUserId,
+    });
+    if (rpcError) {
+      return { success: false, error: deleteError.message || rpcError.message };
+    }
+  }
+
+  revalidatePath("/team");
+  revalidatePath("/dashboard");
+  revalidatePath("/leaderboard");
+  revalidatePath("/reports");
+  revalidatePath(`/profile/${targetUserId}`);
 
   return { success: true };
 }

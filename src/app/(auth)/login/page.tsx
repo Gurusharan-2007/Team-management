@@ -28,7 +28,8 @@ function LoginForm() {
     setFieldErrors({});
     setErrorMsg(null);
 
-    const validation = loginSchema.safeParse({ email, password });
+    const cleanedEmail = email.trim();
+    const validation = loginSchema.safeParse({ email: cleanedEmail, password });
     if (!validation.success) {
       const errors: Record<string, string> = {};
       validation.error.errors.forEach((err) => {
@@ -54,7 +55,7 @@ function LoginForm() {
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: cleanedEmail,
         password,
       });
 
@@ -110,6 +111,7 @@ function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               error={Boolean(fieldErrors.email)}
               autoComplete="email"
+              maxLength={254}
               required
             />
             {fieldErrors.email && (

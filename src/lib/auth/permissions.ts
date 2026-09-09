@@ -30,6 +30,14 @@ export function canManageMembers(role: UserRole | null | undefined): boolean {
 }
 
 /**
+ * Strictly restricted: Only Captain may delete/remove a team member.
+ * Vice Captain, Manager, Strategist, and Member do NOT have delete permission.
+ */
+export function canDeleteMember(role: UserRole | null | undefined): boolean {
+  return isCaptain(role);
+}
+
+/**
  * Only Captain and Vice Captain may modify another member's points.
  */
 export function canManagePoints(role: UserRole | null | undefined): boolean {
