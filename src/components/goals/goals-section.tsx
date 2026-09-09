@@ -149,8 +149,8 @@ export function GoalsSection({
             return (
               <Card
                 key={goal.id}
-                className={`border-border transition-all flex flex-col justify-between ${
-                  isCompleted ? "border-emerald-500/30 bg-emerald-500/[0.02]" : ""
+                className={`transition-all duration-200 flex flex-col justify-between hover:border-border ${
+                  isCompleted ? "border-emerald-500/30 bg-emerald-500/[0.02] shadow-xs" : "border-border/70"
                 }`}
               >
                 <CardHeader className="pb-3">

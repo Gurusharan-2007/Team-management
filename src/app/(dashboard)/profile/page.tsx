@@ -184,7 +184,7 @@ export default async function ProfilePage() {
     <div className="space-y-6">
       <PageHeader
         title="My Profile"
-        description="Manage your college team identity, point balances, course certifications, and performance ledger."
+        description="Manage your team profile, verified points ledger, technical certifications, and milestone achievements."
       >
         <div className="flex items-center gap-2">
           <ManagePointsDialog
@@ -368,9 +368,9 @@ export default async function ProfilePage() {
         <CardContent>
           <EmptyState
             icon={TrendingUp}
-            badgeText="Step 4 Telemetry Container"
+            badgeText="Performance Analytics"
             title="Weekly Trend Analytics"
-            description="Individual weekly performance snapshots from weekly_reports will be plotted here with Recharts once reporting cycles commence."
+            description="Individual weekly performance snapshots from the Saturday reporting cycle will display here once snapshot cycles commence."
             className="py-10 border-dashed"
           />
         </CardContent>

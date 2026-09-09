@@ -3,9 +3,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AN Team Portal | College Group Management",
+  title: "Team Portal | Modern Team Operations & Analytics",
   description:
-    "Internal team performance, weekly reporting, and points management system.",
+    "Internal team performance, weekly reporting, milestones, and point management system.",
 };
 
 export default function RootLayout({

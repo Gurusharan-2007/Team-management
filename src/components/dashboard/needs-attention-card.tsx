@@ -119,11 +119,11 @@ export function NeedsAttentionCard({
   });
 
   return (
-    <Card className="border-border flex flex-col justify-between">
+    <Card className="border-border/70 flex flex-col justify-between shadow-xs">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-amber-500" />
               Needs Attention
             </CardTitle>
@@ -160,7 +160,7 @@ export function NeedsAttentionCard({
                 <div className="min-w-0 space-y-0.5">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <Link
-                      href={`/team/${item.member.id}`}
+                      href={`/profile/${item.member.id}`}
                       className="text-xs font-semibold text-foreground hover:underline truncate"
                     >
                       {item.member.full_name}
@@ -179,8 +179,8 @@ export function NeedsAttentionCard({
                 </div>
 
                 <Link
-                  href={`/team/${item.member.id}`}
-                  className="shrink-0 p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  href={`/profile/${item.member.id}`}
+                  className="shrink-0 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/70 transition-colors"
                   title="View Profile"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />

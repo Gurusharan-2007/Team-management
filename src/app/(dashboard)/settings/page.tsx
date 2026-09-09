@@ -8,8 +8,8 @@ import { SettingsPortal } from "@/components/settings/settings-portal";
 import { Profile } from "@/types/domain";
 
 export const metadata: Metadata = {
-  title: "Settings | Apex Team Management",
-  description: "Personal and administrative workspace settings",
+  title: "Settings | Team Portal",
+  description: "Personal profile preferences, workspace configurations, and security controls.",
 };
 
 export default async function SettingsPage() {
@@ -25,7 +25,7 @@ export default async function SettingsPage() {
   const fallbackProfile: Profile = {
     id: currentUser.user.id,
     full_name: currentUser.profile?.full_name || "Team Member",
-    email: currentUser.user.email || "member@apexteam.edu",
+    email: currentUser.user.email || "member@teamportal.io",
     role: currentUser.role || "member",
     status: currentUser.profile?.status || "active",
     activity_points: currentUser.profile?.activity_points || 0,

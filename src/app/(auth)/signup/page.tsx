@@ -93,24 +93,24 @@ export default function SignupPage() {
   };
 
   return (
-    <Card className="border-border shadow-sm">
-      <CardHeader className="space-y-1 pb-4">
-        <CardTitle className="text-xl">Create team account</CardTitle>
-        <CardDescription>
-          Register as a college team member to track your performance
+    <Card className="border-border/80 shadow-md">
+      <CardHeader className="space-y-1.5 pb-4">
+        <CardTitle className="text-xl font-bold tracking-tight">Create Team Account</CardTitle>
+        <CardDescription className="text-xs">
+          Join Team Portal to track points, weekly goals, and technical courses
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-3.5 pt-0">
           {errorMsg && (
-            <div className="flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="flex items-center gap-2 rounded-md border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <span>{successMsg}</span>
             </div>

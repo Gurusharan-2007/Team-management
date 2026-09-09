@@ -218,23 +218,23 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
         </Card>
       )}
 
-      {/* Step 6 Architecture Info Card */}
-      <div className="rounded-lg border border-border/80 bg-card p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      {/* Snapshot Integrity & Audit Compliance */}
+      <div className="rounded-xl border border-border/70 bg-card/60 backdrop-blur-sm p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted/60 text-foreground">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-primary/10 text-primary">
             <Shield className="h-4 w-4" />
           </div>
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">
-              Step 6 Reporting &amp; Snapshot Immutability Active
+              Automated Reporting &amp; Snapshot Integrity
             </h4>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Sunday-to-Saturday reporting weeks with 11 AM/4 PM/6 PM reminder idempotency, explicit Saturday update check-ins, and 8:00 PM snapshot generation configured in {teamTimezone}.
+              Sunday-to-Saturday reporting cycles with automated reminder notifications, weekly Saturday updates, and immutable 8:00 PM snapshots in {teamTimezone}.
             </p>
           </div>
         </div>
-        <Badge variant="success" className="text-[11px] shrink-0 font-mono">
-          Immutable Snapshots
+        <Badge variant="subtle" className="text-[11px] shrink-0 font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
+          Audit Compliant
         </Badge>
       </div>
     </div>

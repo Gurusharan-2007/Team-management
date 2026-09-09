@@ -121,7 +121,7 @@ export function PointHistorySection({
             className="py-10 border-dashed"
           />
         ) : (
-          <div className="divide-y divide-border/60 rounded-lg border border-border/70 overflow-hidden bg-card">
+          <div className="divide-y divide-border/60 rounded-xl border border-border/70 overflow-hidden bg-card shadow-xs">
             {filteredHistory.map((item) => {
               const isPositive = item.change_amount > 0;
               const formattedAmount = `${isPositive ? "+" : ""}${item.change_amount}`;

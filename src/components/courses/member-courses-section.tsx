@@ -95,7 +95,7 @@ export function MemberCoursesSection({
             {completedCourses.map((course) => (
               <div
                 key={course.id}
-                className="group relative rounded-lg border border-border/80 bg-background/60 p-3.5 transition-colors hover:border-border hover:bg-muted/30 space-y-1.5"
+                className="group relative rounded-xl border border-border/70 bg-card/60 p-3.5 transition-all duration-200 hover:border-border hover:shadow-xs space-y-1.5"
               >
                 <div className="flex items-center gap-2">
                   <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-primary/10 text-primary">

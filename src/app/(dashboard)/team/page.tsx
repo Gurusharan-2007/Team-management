@@ -133,7 +133,7 @@ export default async function TeamPage() {
     <div className="space-y-6">
       <PageHeader
         title="Team Directory"
-        description="College group directory, technical competencies, and role assignments."
+        description="Team roster, role permissions, and active member technical profiles."
       >
         <InviteMemberDialog canManage={canManage} />
       </PageHeader>

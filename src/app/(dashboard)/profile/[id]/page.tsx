@@ -420,9 +420,9 @@ export default async function MemberDetailPage({ params }: ProfilePageProps) {
         <CardContent>
           <EmptyState
             icon={TrendingUp}
-            badgeText="Step 4 Telemetry Container"
+            badgeText="Performance Analytics"
             title="Weekly Trend Charts"
-            description="Individual weekly performance snapshots from weekly_reports will be plotted here with Recharts once reporting cycles commence."
+            description="Individual weekly performance snapshots from the Saturday reporting cycle will display here once snapshot cycles commence."
             className="py-10 border-dashed"
           />
         </CardContent>

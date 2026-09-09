@@ -61,51 +61,51 @@ export function TopPerformersCard({
   function getRankBadge(index: number) {
     if (index === 0) {
       return (
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold text-xs font-mono">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 font-bold text-xs font-mono border border-amber-500/30 shadow-xs">
           1
         </span>
       );
     }
     if (index === 1) {
       return (
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-300/30 text-slate-700 dark:text-slate-300 font-bold text-xs font-mono">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-300/25 text-slate-700 dark:text-slate-200 font-bold text-xs font-mono border border-slate-400/30 shadow-xs">
           2
         </span>
       );
     }
     if (index === 2) {
       return (
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700/20 text-amber-700 dark:text-amber-500 font-bold text-xs font-mono">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-700/15 text-amber-700 dark:text-amber-400 font-bold text-xs font-mono border border-amber-700/30 shadow-xs">
           3
         </span>
       );
     }
     return (
-      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium text-xs font-mono">
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted/60 text-muted-foreground font-medium text-xs font-mono">
         {index + 1}
       </span>
     );
   }
 
   return (
-    <Card className="border-border flex flex-col justify-between">
+    <Card className="border-border/70 flex flex-col justify-between shadow-xs">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Trophy className="h-4 w-4 text-amber-500" />
               {title}
             </CardTitle>
             <CardDescription className="text-xs">{description}</CardDescription>
           </div>
 
-          <div className="flex items-center gap-1 bg-muted p-1 rounded-md self-start sm:self-auto">
+          <div className="flex items-center gap-1 bg-muted/70 p-1 rounded-lg self-start sm:self-auto border border-border/50">
             <button
               type="button"
               onClick={() => setMetric("activity")}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
                 metric === "activity"
-                  ? "bg-background text-foreground shadow-sm"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -115,9 +115,9 @@ export function TopPerformersCard({
             <button
               type="button"
               onClick={() => setMetric("reward")}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
                 metric === "reward"
-                  ? "bg-background text-foreground shadow-sm"
+                  ? "bg-background text-foreground shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -148,7 +148,7 @@ export function TopPerformersCard({
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     {getRankBadge(index)}
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-8 w-8 border border-border/60">
                       {member.avatar_url && (
                         <AvatarImage src={member.avatar_url} alt={member.full_name} />
                       )}
@@ -159,7 +159,7 @@ export function TopPerformersCard({
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/team/${member.id}`}
+                          href={`/profile/${member.id}`}
                           className="text-xs font-semibold text-foreground hover:underline truncate"
                         >
                           {member.full_name}

@@ -56,20 +56,27 @@ export function OverviewStats({
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.title} className="border-border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          <div
+            key={stat.title}
+            className="rounded-xl border border-border/70 bg-card/80 p-4 sm:p-5 shadow-xs transition-all duration-200 hover:border-border hover:shadow-sm"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                 {stat.title}
-              </CardTitle>
-              <Icon className={`h-4 w-4 ${stat.iconColor}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold tracking-tight font-mono text-foreground">
+              </span>
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/60 bg-muted/40 shrink-0">
+                <Icon className={`h-3.5 w-3.5 ${stat.iconColor}`} />
+              </div>
+            </div>
+            <div className="mt-2.5">
+              <div className="text-2xl sm:text-3xl font-bold tracking-tight font-mono text-foreground">
                 {stat.value}
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{stat.subtext}</p>
-            </CardContent>
-          </Card>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed truncate">
+                {stat.subtext}
+              </p>
+            </div>
+          </div>
         );
       })}
     </div>

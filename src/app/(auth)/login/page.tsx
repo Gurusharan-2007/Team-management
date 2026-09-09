@@ -73,24 +73,24 @@ function LoginForm() {
   };
 
   return (
-    <Card className="border-border shadow-sm">
-      <CardHeader className="space-y-1 pb-4">
-        <CardTitle className="text-xl">Sign in to your account</CardTitle>
-        <CardDescription>
-          Enter your team credentials to access the workspace
+    <Card className="border-border/80 shadow-md">
+      <CardHeader className="space-y-1.5 pb-4">
+        <CardTitle className="text-xl font-bold tracking-tight">Sign in to Team Portal</CardTitle>
+        <CardDescription className="text-xs">
+          Enter your team credentials to access your workspace
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4 pt-0">
           {errorMsg && (
-            <div className="flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {!isSupabaseConfigured() && (
-            <div className="rounded-md border border-amber-500/20 bg-amber-500/10 p-2.5 text-[11px] text-amber-700 dark:text-amber-300">
+            <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-2.5 text-[11px] text-amber-700 dark:text-amber-300">
               <strong>Local Setup Note:</strong> Supabase keys not detected in .env.local. You can test UI flows directly.
             </div>
           )}
@@ -98,14 +98,14 @@ function LoginForm() {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="text-xs font-medium text-foreground"
+              className="text-xs font-semibold text-foreground"
             >
               Email address
             </label>
             <Input
               id="email"
               type="email"
-              placeholder="member@college.edu"
+              placeholder="member@team.internal"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={Boolean(fieldErrors.email)}

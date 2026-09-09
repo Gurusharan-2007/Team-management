@@ -8,7 +8,7 @@ import { ActivityTimeline } from "@/components/activity/activity-timeline";
 import { AccessDenied } from "@/components/ui/access-denied";
 
 export const metadata: Metadata = {
-  title: "Team Activity | Apex Team Management",
+  title: "Team Activity | Team Portal",
   description: "Organizational audit trail and activity log",
 };
 

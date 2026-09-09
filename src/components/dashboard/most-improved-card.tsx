@@ -28,11 +28,11 @@ export function MostImprovedCard({ improvedMember }: MostImprovedCardProps) {
   const hasData = improvedMember && improvedMember.total_delta > 0;
 
   return (
-    <Card className="border-border flex flex-col justify-between">
+    <Card className="border-border/70 flex flex-col justify-between shadow-xs">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
               Most Improved
             </CardTitle>
@@ -41,7 +41,7 @@ export function MostImprovedCard({ improvedMember }: MostImprovedCardProps) {
             </CardDescription>
           </div>
           <Badge variant="subtle" className="text-[10px]">
-            {hasData ? improvedMember.week_label : "Step 6 Automated"}
+            {hasData ? improvedMember.week_label : "Automated Snapshot"}
           </Badge>
         </div>
       </CardHeader>
@@ -49,7 +49,7 @@ export function MostImprovedCard({ improvedMember }: MostImprovedCardProps) {
       <CardContent className="pt-0">
         {hasData ? (
           <div className="space-y-3 py-1">
-            <div className="flex items-center justify-between gap-3 p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/[0.03]">
+            <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.04]">
               <div className="flex items-center gap-2.5 min-w-0">
                 <Avatar className="h-9 w-9 border-2 border-emerald-500/30">
                   {improvedMember.avatar_url && (
@@ -62,7 +62,7 @@ export function MostImprovedCard({ improvedMember }: MostImprovedCardProps) {
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <Link
-                      href={`/team/${improvedMember.member_id}`}
+                      href={`/profile/${improvedMember.member_id}`}
                       className="text-xs font-bold text-foreground hover:underline truncate"
                     >
                       {improvedMember.full_name}

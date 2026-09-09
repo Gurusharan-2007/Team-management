@@ -25,7 +25,7 @@ export function MemberReportsTable({
   }
 
   return (
-    <div className="rounded-md border border-border overflow-hidden">
+    <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-xs text-left">
           <thead className="bg-muted/50 text-muted-foreground uppercase text-[10px] tracking-wider border-b border-border">
@@ -148,8 +148,8 @@ export function MemberReportsTable({
                   {/* Action Link */}
                   <td className="px-4 py-3 text-right">
                     <Link
-                      href={`/team/${report.member_id}`}
-                      className="inline-flex items-center gap-1 text-[11px] font-medium text-foreground hover:underline"
+                      href={`/profile/${report.member_id}`}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
                     >
                       Profile
                       <ArrowRight className="h-3 w-3" />

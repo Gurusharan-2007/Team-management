@@ -132,10 +132,10 @@ export function Sidebar({
               onClick={onNavClick}
               title={isCollapsed ? item.title : undefined}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors select-none",
+                "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium transition-all select-none",
                 isActive
-                  ? "bg-sidebar-accent text-foreground font-semibold shadow-xs"
-                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground"
+                  ? "bg-primary/10 text-primary font-semibold shadow-xs"
+                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               )}
             >
               <Icon
@@ -179,16 +179,16 @@ export function Sidebar({
           className="flex items-center gap-2.5 overflow-hidden font-semibold text-foreground tracking-tight"
           onClick={onNavClick}
         >
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-foreground text-background font-bold text-xs tracking-wider">
-            AN
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shadow-xs">
+            TP
           </div>
           {!isCollapsed && (
             <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-xs font-semibold uppercase tracking-wider text-foreground">
+              <span className="truncate text-xs font-bold tracking-tight text-foreground">
                 Team Portal
               </span>
-              <span className="truncate text-[10px] text-muted-foreground">
-                College Org Workspace
+              <span className="truncate text-[10px] text-muted-foreground font-medium">
+                Operations &amp; Analytics
               </span>
             </div>
           )}
@@ -216,7 +216,7 @@ export function Sidebar({
       {/* Role and User Footer */}
       <div className="border-t border-sidebar-border p-2 space-y-2">
         {!isCollapsed && (
-          <div className="rounded-lg border border-sidebar-border/80 bg-background/50 p-2.5 space-y-1.5">
+          <div className="rounded-xl border border-sidebar-border bg-card/60 p-2.5 space-y-1.5 shadow-xs">
             <div className="flex items-center justify-between gap-1">
               <span className="text-[10px] uppercase font-semibold text-muted-foreground tracking-wider">
                 Assigned Role

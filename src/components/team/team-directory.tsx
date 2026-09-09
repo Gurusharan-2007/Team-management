@@ -359,7 +359,7 @@ export function TeamDirectory({
           className="py-12"
         />
       ) : (
-        <div className="rounded-lg border border-border bg-card overflow-hidden">
+        <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs">
           {/* Desktop & Tablet Table */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">

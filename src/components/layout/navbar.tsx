@@ -22,9 +22,9 @@ interface NavbarProps {
 
 const ROUTE_NAMES: Record<string, string> = {
   "/dashboard": "Dashboard",
-  "/team": "Team Roster",
+  "/team": "Team Directory",
   "/reports": "Weekly Reports",
-  "/leaderboard": "Leaderboards",
+  "/leaderboard": "Leaderboard",
   "/notifications": "Notifications",
   "/profile": "My Profile",
   "/activity": "Team Activity",
@@ -49,13 +49,13 @@ export function Navbar({
       : "Workspace";
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 w-full items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 flex h-14 w-full items-center justify-between border-b border-border/70 bg-background/80 px-4 sm:px-6 backdrop-blur-md">
       <div className="flex items-center gap-3">
         {/* Mobile menu trigger */}
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden h-8 w-8 text-muted-foreground"
+          className="lg:hidden h-8 w-8 text-muted-foreground hover:text-foreground"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle navigation menu"
         >
@@ -67,10 +67,10 @@ export function Navbar({
         </Button>
 
         {/* Minimal Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs">
-          <span className="font-medium text-muted-foreground">Portal</span>
-          <span className="text-muted-foreground/40">/</span>
-          <span className="font-semibold text-foreground tracking-tight">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-foreground/80 tracking-tight">Team Portal</span>
+          <span className="text-muted-foreground/30">/</span>
+          <span className="font-medium text-foreground tracking-tight">
             {currentRouteName}
           </span>
         </nav>

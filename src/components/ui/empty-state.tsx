@@ -22,14 +22,14 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-card/40 p-8 text-center",
+        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/30 p-8 sm:p-12 text-center",
         className
       )}
       {...props}
     >
       {Icon && (
-        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background/80 text-muted-foreground">
-          <Icon className="h-5 w-5 stroke-[1.5]" />
+        <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-xl border border-border/80 bg-muted/40 text-muted-foreground shadow-xs">
+          <Icon className="h-5 w-5 stroke-[1.75]" />
         </div>
       )}
       {badgeText && (

@@ -234,27 +234,27 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Workspace Header */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-5 pt-1">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/70 pb-5 pt-1">
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
               Workspace Overview
             </h1>
             <RoleBadge role={userRole} />
           </div>
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            Welcome back, {userName}. Operations, performance analytics, goals, and team overview.
+          <p className="text-xs text-muted-foreground sm:text-sm leading-relaxed">
+            Welcome back, <span className="font-semibold text-foreground">{userName}</span>. Here is your team&apos;s live performance summary and targets.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 pt-1 sm:pt-0 shrink-0">
           <Button variant="outline" size="sm" asChild className="text-xs">
             <Link href="/team">
               <Users className="mr-1.5 h-3.5 w-3.5" />
               Team Directory
             </Link>
           </Button>
-          <Button size="sm" asChild className="text-xs">
+          <Button size="sm" asChild className="text-xs shadow-xs">
             <Link href="/profile">
               <Zap className="mr-1.5 h-3.5 w-3.5" />
               My Points Ledger
@@ -304,11 +304,11 @@ export default async function DashboardPage() {
 
       {/* Point Activity / Audit Trail */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <Card className="border-border lg:col-span-3">
+        <Card className="border-border/70 lg:col-span-3">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div>
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary" />
                 Recent Point Adjustments &amp; Activity
               </CardTitle>
               <CardDescription className="text-xs">
@@ -324,13 +324,13 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent className="pt-0">
             {recentPointEvents.length > 0 ? (
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {recentPointEvents.map((event) => {
                   const isPositive = event.change_amount > 0;
                   return (
                     <div
                       key={event.id}
-                      className="rounded-md border border-border/70 p-3 space-y-1.5 bg-background/50 text-xs"
+                      className="rounded-xl border border-border/70 p-3.5 space-y-1.5 bg-card/60 shadow-xs hover:border-border transition-all text-xs"
                     >
                       <div className="flex items-center justify-between">
                         <span
@@ -344,19 +344,19 @@ export default async function DashboardPage() {
                           {event.change_amount}{" "}
                           {event.point_type === "activity" ? "Act" : "Rew"} Pts
                         </span>
-                        <span className="text-[10px] text-muted-foreground">
+                        <span className="text-[10px] text-muted-foreground font-medium">
                           {formatDateTime(event.created_at)}
                         </span>
                       </div>
                       <p className="text-[11px] text-muted-foreground truncate">
                         {event.reason}
                       </p>
-                      <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1 border-t border-border/40">
-                        <span className="capitalize">
+                      <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1.5 border-t border-border/40">
+                        <span className="capitalize font-medium">
                           {event.source === "self_update" ? "Self Update" : "Admin"}
                         </span>
                         <span className="font-mono">
-                          {event.previous_value} → {event.new_value} pts
+                          {event.previous_value} &rarr; {event.new_value} pts
                         </span>
                       </div>
                     </div>
@@ -370,26 +370,6 @@ export default async function DashboardPage() {
             )}
           </CardContent>
         </Card>
-      </div>
-
-      {/* Step 5 Foundation Architecture Banner */}
-      <div className="rounded-lg border border-border/80 bg-card p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted/60 text-foreground">
-            <Shield className="h-4 w-4" />
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">
-              Step 5 Dashboard &amp; Goals System Active
-            </h4>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Performance metrics computed dynamically from verified ledger balances. Goals system supports Team and Individual targets with Captain/Vice Captain administration and audit logging.
-            </p>
-          </div>
-        </div>
-        <div className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium shrink-0">
-          ✓ Verified Real Data
-        </div>
       </div>
     </div>
   );

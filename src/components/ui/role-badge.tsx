@@ -16,25 +16,25 @@ export function RoleBadge({
   const normalizedRole = (role as UserRole) || "member";
   const label = ROLE_LABELS[normalizedRole] || "Member";
 
-  // Refined, subtle SaaS palette (Linear/Vercel inspired)
+  // Refined, subtle SaaS palette
   const roleStyles: Record<UserRole, string> = {
     captain:
-      "border-foreground/20 bg-foreground/10 text-foreground font-semibold dark:bg-foreground/15",
+      "border-indigo-500/25 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 font-semibold shadow-xs",
     vice_captain:
-      "border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300 font-medium",
+      "border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300 font-medium",
     manager:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-medium",
+      "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-medium",
     strategist:
-      "border-purple-500/20 bg-purple-500/10 text-purple-700 dark:text-purple-300 font-medium",
+      "border-violet-500/25 bg-violet-500/10 text-violet-700 dark:text-violet-300 font-medium",
     member:
-      "border-border/80 bg-muted/50 text-muted-foreground font-normal",
+      "border-border bg-muted/60 text-muted-foreground font-medium",
   };
 
   const roleDots: Record<UserRole, string> = {
-    captain: "bg-foreground",
-    vice_captain: "bg-blue-500",
-    manager: "bg-emerald-500",
-    strategist: "bg-purple-500",
+    captain: "bg-indigo-600 dark:bg-indigo-400 ring-2 ring-indigo-500/20",
+    vice_captain: "bg-sky-500 ring-2 ring-sky-500/20",
+    manager: "bg-emerald-500 ring-2 ring-emerald-500/20",
+    strategist: "bg-violet-500 ring-2 ring-violet-500/20",
     member: "bg-muted-foreground/60",
   };
 
