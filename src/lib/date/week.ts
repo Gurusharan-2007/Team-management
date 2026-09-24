@@ -88,6 +88,7 @@ export function getReportingWeek(referenceDate: Date = new Date()): ReportingWee
  */
 export function formatWeekRange(weekStart: string, weekEnd: string): string {
   try {
+    if (!weekStart || !weekEnd) return "Current Period";
     const [sYear, sMonth, sDay] = weekStart.split("-").map(Number);
     const [eYear, eMonth, eDay] = weekEnd.split("-").map(Number);
 

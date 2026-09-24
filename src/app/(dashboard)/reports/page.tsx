@@ -21,6 +21,7 @@ import { TeamTrendChart } from "@/components/reports/team-trend-chart";
 import { IndividualTrendChart } from "@/components/reports/individual-trend-chart";
 import { MemberReportsTable } from "@/components/reports/member-reports-table";
 import { AdminSchedulerDialog } from "@/components/reports/admin-scheduler-dialog";
+import { ReportWeekSelect } from "@/components/reports/report-week-select";
 import {
   FileText,
   Calendar,
@@ -94,29 +95,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
 
         <div className="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
           {/* Week Selector Dropdown */}
-          {reports.length > 0 && (
-            <div className="relative inline-block text-left">
-              <div className="flex items-center gap-1.5 border border-border bg-background rounded-md px-2.5 py-1.5 text-xs shadow-sm">
-                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                <select
-                  defaultValue={selectedReportId}
-                  className="bg-transparent text-foreground text-xs font-medium focus:outline-none cursor-pointer pr-1"
-                  onChange={(e) => {
-                    // Navigate to selected week
-                    const val = e.target.value;
-                    window.location.href = `/reports?week=${val}`;
-                  }}
-                >
-                  {reports.map((r) => (
-                    <option key={r.id} value={r.id} className="bg-background text-foreground">
-                      {formatWeekRange(r.week_start, r.week_end)}{" "}
-                      {r.status === "open" ? "(Open)" : "(Finalized)"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
+          <ReportWeekSelect reports={reports} selectedReportId={selectedReportId} />
 
           {/* Admin Scheduler Controls (Captain / Vice Captain) */}
           {isLeader && (

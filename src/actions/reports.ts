@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import {
   WeeklyReport,
   MemberWeeklyReport,
@@ -720,7 +721,9 @@ export async function generateWeeklyReportAction(options?: {
     };
   }
 
-  const supabase = await createClient();
+  const supabase: any = (options?.isCron || Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY))
+    ? createAdminClient()
+    : await createClient();
 
   // 1. Find or create weekly_reports row
   let { data: report } = await (supabase.from("weekly_reports") as any)
@@ -845,12 +848,16 @@ export async function generateWeeklyReportAction(options?: {
   }
 
   // 7. Mark weekly report as generated (immutable)
-  await (supabase.from("weekly_reports") as any)
+  const { error: statusError } = await (supabase.from("weekly_reports") as any)
     .update({
       status: "generated",
       generated_at: nowIso,
     })
     .eq("id", reportId);
+
+  if (statusError) {
+    return { success: false, error: statusError.message || "Failed to update weekly report status to generated." };
+  }
 
   // 8. Broadcast in-app notification to all active members
   const notificationsPayload = profiles.map((p: any) => ({
@@ -861,7 +868,10 @@ export async function generateWeeklyReportAction(options?: {
     is_read: false,
   }));
 
-  await (supabase.from("notifications") as any).insert(notificationsPayload);
+  const { error: notifError } = await (supabase.from("notifications") as any).insert(notificationsPayload);
+  if (notifError) {
+    return { success: false, error: notifError.message || "Failed to broadcast report notifications." };
+  }
 
   // 9. Audit Log
   await (supabase.from("audit_logs") as any).insert({
@@ -928,7 +938,9 @@ export async function runSaturdayRemindersAction(
     };
   }
 
-  const supabase = await createClient();
+  const supabase: any = (options?.isCron || Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY))
+    ? createAdminClient()
+    : await createClient();
 
   // 1. Find or create weekly report
   let { data: report } = await (supabase.from("weekly_reports") as any)
@@ -938,10 +950,18 @@ export async function runSaturdayRemindersAction(
     .maybeSingle();
 
   if (!report) {
-    const { data: newReport } = await (supabase.from("weekly_reports") as any)
+    const { data: newReport, error: createError } = await (supabase.from("weekly_reports") as any)
       .insert({ week_start: weekStart, week_end: weekEnd, status: "open" })
       .select("id, status")
       .single();
+
+    if (createError) {
+      return {
+        success: false,
+        membersNotified: 0,
+        error: createError.message || "Failed to initialize weekly reporting period for reminders.",
+      };
+    }
     report = newReport;
   }
 
@@ -1007,8 +1027,23 @@ export async function runSaturdayRemindersAction(
     is_read: false,
   }));
 
-  await (supabase.from("weekly_reminders") as any).insert(reminderRecords);
-  await (supabase.from("notifications") as any).insert(notificationRecords);
+  const { error: remError } = await (supabase.from("weekly_reminders") as any).insert(reminderRecords);
+  if (remError) {
+    return {
+      success: false,
+      membersNotified: 0,
+      error: remError.message || "Failed to record weekly reminders in database.",
+    };
+  }
+
+  const { error: notifError } = await (supabase.from("notifications") as any).insert(notificationRecords);
+  if (notifError) {
+    return {
+      success: false,
+      membersNotified: 0,
+      error: notifError.message || "Failed to dispatch reminder notifications in database.",
+    };
+  }
 
   revalidatePath("/notifications");
   revalidatePath("/reports");

@@ -91,6 +91,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
     const cookieStore = cookies();
     const devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
     const devName = cookieStore.get("dev_full_name")?.value || null;
+    const devRole = (cookieStore.get("dev_role")?.value as UserRole) || "captain";
 
     // Local preview fallback mock (development / non-production only)
     return {
@@ -104,7 +105,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
         id: "local-dev-user-id",
         full_name: devName || "Gurusharan G",
         email: "gurusharan@college.edu",
-        role: "captain",
+        role: devRole,
         status: "active",
         activity_points: 0,
         reward_points: 0,
@@ -112,7 +113,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
-      role: "captain",
+      role: devRole,
       isConfigured: false,
     };
   }
@@ -121,6 +122,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
     const cookieStore = cookies();
     const devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
     const devName = cookieStore.get("dev_full_name")?.value || null;
+    const devRole = (cookieStore.get("dev_role")?.value as UserRole) || "captain";
 
     const supabase = await createClient();
     const {
@@ -140,7 +142,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
             id: "local-dev-user-id",
             full_name: devName || "Gurusharan G",
             email: "gurusharan@college.edu",
-            role: "captain",
+            role: devRole,
             status: "active",
             activity_points: 0,
             reward_points: 0,
@@ -148,7 +150,7 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           },
-          role: "captain",
+          role: devRole,
           isConfigured: true,
         };
       }

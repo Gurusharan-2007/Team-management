@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentTeamTime, isSaturdayInTeamTimezone } from "@/lib/date/week";
 import { runSaturdayRemindersAction, generateWeeklyReportAction } from "@/actions/reports";
 import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isLeadership } from "@/lib/auth/permissions";
 
 /**
@@ -31,10 +32,12 @@ async function handleScheduler(req: NextRequest) {
 
   let isAuthorized = !!envSecret && !!providedSecret && providedSecret === envSecret;
 
-  // Fallback: Check if caller is Captain or Vice Captain via session
-  if (!isAuthorized) {
+  // Fallback: Check if caller is Captain or Vice Captain via session (e.g. admin UI trigger)
+  // Only permit if no invalid secret was provided and an active authenticated session exists
+  if (!isAuthorized && !providedSecret) {
+    const hasAuthCookie = req.cookies.getAll().some((c) => c.name.startsWith("sb-") && c.name.includes("auth-token"));
     const currentUser = await getCurrentUser();
-    if (currentUser.user && isLeadership(currentUser.role)) {
+    if (currentUser.user && isLeadership(currentUser.role) && (isProd ? true : hasAuthCookie)) {
       isAuthorized = true;
     }
   }
@@ -64,21 +67,33 @@ async function handleScheduler(req: NextRequest) {
     if (actionParam === "remind_11am") {
       executedJob = "saturday_11am_reminder";
       const res = await runSaturdayRemindersAction("saturday_11am", { isCron: true });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to execute saturday_11am reminder");
+      }
       notificationsSent = res.membersNotified;
       executionDetails.result = res;
     } else if (actionParam === "remind_4pm") {
       executedJob = "saturday_4pm_reminder";
       const res = await runSaturdayRemindersAction("saturday_4pm", { isCron: true });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to execute saturday_4pm reminder");
+      }
       notificationsSent = res.membersNotified;
       executionDetails.result = res;
     } else if (actionParam === "remind_6pm") {
       executedJob = "saturday_6pm_reminder";
       const res = await runSaturdayRemindersAction("saturday_6pm", { isCron: true });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to execute saturday_6pm reminder");
+      }
       notificationsSent = res.membersNotified;
       executionDetails.result = res;
     } else if (actionParam === "generate_report") {
       executedJob = "saturday_8pm_report_generation";
       const res = await generateWeeklyReportAction({ isCron: true });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to generate weekly report");
+      }
       reportGenerated = res.success && !res.alreadyGenerated;
       executionDetails.result = res;
     } else {
@@ -89,21 +104,33 @@ async function handleScheduler(req: NextRequest) {
       } else if (teamTime.hour === 11) {
         executedJob = "auto_saturday_11am_reminder";
         const res = await runSaturdayRemindersAction("saturday_11am", { isCron: true });
+        if (!res.success) {
+          throw new Error(res.error || "Failed to execute auto_saturday_11am reminder");
+        }
         notificationsSent = res.membersNotified;
         executionDetails.result = res;
       } else if (teamTime.hour === 16) {
         executedJob = "auto_saturday_4pm_reminder";
         const res = await runSaturdayRemindersAction("saturday_4pm", { isCron: true });
+        if (!res.success) {
+          throw new Error(res.error || "Failed to execute auto_saturday_4pm reminder");
+        }
         notificationsSent = res.membersNotified;
         executionDetails.result = res;
       } else if (teamTime.hour === 18) {
         executedJob = "auto_saturday_6pm_reminder";
         const res = await runSaturdayRemindersAction("saturday_6pm", { isCron: true });
+        if (!res.success) {
+          throw new Error(res.error || "Failed to execute auto_saturday_6pm reminder");
+        }
         notificationsSent = res.membersNotified;
         executionDetails.result = res;
       } else if (teamTime.hour >= 20) {
         executedJob = "auto_saturday_8pm_report_generation";
         const res = await generateWeeklyReportAction({ isCron: true });
+        if (!res.success) {
+          throw new Error(res.error || "Failed to execute auto_saturday_8pm report generation");
+        }
         reportGenerated = res.success && !res.alreadyGenerated;
         executionDetails.result = res;
       } else {
@@ -114,7 +141,8 @@ async function handleScheduler(req: NextRequest) {
 
     // Observability: Write log to cron_job_logs
     try {
-      const supabase = await createClient();
+      const isServiceRoleAvailable = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY);
+      const supabase: any = isServiceRoleAvailable ? createAdminClient() : await createClient();
       await (supabase.from("cron_job_logs") as any).insert({
         job_name: executedJob,
         status: "success",
@@ -138,7 +166,8 @@ async function handleScheduler(req: NextRequest) {
   } catch (err: any) {
     // Log failure
     try {
-      const supabase = await createClient();
+      const isServiceRoleAvailable = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY);
+      const supabase: any = isServiceRoleAvailable ? createAdminClient() : await createClient();
       await (supabase.from("cron_job_logs") as any).insert({
         job_name: executedJob || "failed_cron_job",
         status: "failed",
