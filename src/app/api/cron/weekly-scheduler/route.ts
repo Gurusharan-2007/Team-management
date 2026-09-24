@@ -141,7 +141,13 @@ async function handleScheduler(req: NextRequest) {
 
     // Observability: Write log to cron_job_logs
     try {
-      const isServiceRoleAvailable = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY);
+      const isServiceRoleAvailable = Boolean(
+        process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_SECRET_KEY ||
+        process.env.SUPABASE_SERVICE_KEY ||
+        process.env.SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_ADMIN_KEY
+      );
       const supabase: any = isServiceRoleAvailable ? createAdminClient() : await createClient();
       await (supabase.from("cron_job_logs") as any).insert({
         job_name: executedJob,
@@ -166,7 +172,13 @@ async function handleScheduler(req: NextRequest) {
   } catch (err: any) {
     // Log failure
     try {
-      const isServiceRoleAvailable = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY);
+      const isServiceRoleAvailable = Boolean(
+        process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_SECRET_KEY ||
+        process.env.SUPABASE_SERVICE_KEY ||
+        process.env.SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_ADMIN_KEY
+      );
       const supabase: any = isServiceRoleAvailable ? createAdminClient() : await createClient();
       await (supabase.from("cron_job_logs") as any).insert({
         job_name: executedJob || "failed_cron_job",

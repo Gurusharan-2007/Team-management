@@ -721,7 +721,14 @@ export async function generateWeeklyReportAction(options?: {
     };
   }
 
-  const supabase: any = (options?.isCron || Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY))
+  const hasPrivilegedKey = Boolean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ADMIN_KEY
+  );
+  const supabase: any = (options?.isCron || hasPrivilegedKey)
     ? createAdminClient()
     : await createClient();
 
@@ -938,7 +945,14 @@ export async function runSaturdayRemindersAction(
     };
   }
 
-  const supabase: any = (options?.isCron || Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY))
+  const hasPrivilegedKey = Boolean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ADMIN_KEY
+  );
+  const supabase: any = (options?.isCron || hasPrivilegedKey)
     ? createAdminClient()
     : await createClient();
 
