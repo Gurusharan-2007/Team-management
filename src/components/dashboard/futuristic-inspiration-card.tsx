@@ -9,16 +9,19 @@ import { Button } from "@/components/ui/button";
 export function FuturisticInspirationCard() {
   return (
     <div className="glass-panel-dark relative overflow-hidden rounded-2xl p-5 select-none flex items-center gap-4 h-full w-full">
-      {/* 3D Geometric Glowing Crystal Prism (SVG Art from Reference) */}
-      <div className="relative flex h-16 w-16 sm:h-20 sm:w-20 shrink-0 items-center justify-center">
+      {/* 3D Geometric Glowing Crystal Prism (Bounded Decorative Element) */}
+      <div className="relative flex h-14 w-14 max-h-14 max-w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-cyan-500/10 border border-cyan-500/20 pointer-events-none select-none z-0">
         {/* Ambient Glow */}
-        <div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-xl animate-pulse-subtle pointer-events-none" />
+        <div className="absolute inset-0 rounded-full bg-cyan-400/15 blur-sm pointer-events-none" />
 
-        {/* Faceted Crystal SVG */}
+        {/* Faceted Crystal SVG (Explicitly bounded dimensions) */}
         <svg
-          className="h-13 w-13 sm:h-16 sm:w-16 drop-shadow-[0_0_14px_rgba(56,189,248,0.7)] transition-transform duration-300 hover:scale-105"
+          className="h-9 w-9 max-h-9 max-w-9 drop-shadow-[0_0_8px_rgba(56,189,248,0.5)] pointer-events-none"
           viewBox="0 0 64 64"
+          width="36"
+          height="36"
           fill="none"
+          aria-hidden="true"
         >
           {/* Top Facet */}
           <polygon points="32,6 48,22 32,26 16,22" fill="#67e8f9" opacity="0.9" />

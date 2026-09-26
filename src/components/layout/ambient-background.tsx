@@ -6,7 +6,7 @@ export function AmbientBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden select-none"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
     >
       {/* 1. Deep Midnight Cosmic Navy Foundation */}
       <div className="absolute inset-0 bg-[#060913] bg-gradient-to-b from-[#060913] via-[#090e1f] to-[#070b16] hidden dark:block" />
@@ -43,58 +43,6 @@ export function AmbientBackground() {
 
       {/* 7. Atmosphere Light Diffusion & Subtle Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_50%,rgba(6,9,19,0.7)_100%)] hidden dark:block" />
-
-      {/* 8. 3D Translucent Isometric Cyan Glass Cube (from reference image bottom-right) */}
-      <div className="absolute -bottom-10 -right-10 pointer-events-none select-none opacity-80 mix-blend-screen hidden dark:sm:block">
-        <div className="relative h-64 w-64">
-          <div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-3xl animate-pulse-subtle" />
-          <svg
-            className="h-full w-full drop-shadow-[0_0_30px_rgba(56,189,248,0.5)] transform rotate-12"
-            viewBox="0 0 200 200"
-            fill="none"
-          >
-            {/* Top Isometric Face */}
-            <polygon
-              points="100,25 165,62 100,100 35,62"
-              fill="url(#cube-top)"
-              opacity="0.85"
-            />
-            {/* Right Isometric Face */}
-            <polygon
-              points="100,100 165,62 165,138 100,175"
-              fill="url(#cube-right)"
-              opacity="0.75"
-            />
-            {/* Left Isometric Face */}
-            <polygon
-              points="100,100 35,62 35,138 100,175"
-              fill="url(#cube-left)"
-              opacity="0.9"
-            />
-            {/* Edge Highlights */}
-            <line x1="100" y1="25" x2="100" y2="100" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.8" />
-            <line x1="35" y1="62" x2="100" y2="100" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.7" />
-            <line x1="165" y1="62" x2="100" y2="100" stroke="#38bdf8" strokeWidth="1.5" opacity="0.7" />
-            <line x1="100" y1="100" x2="100" y2="175" stroke="#38bdf8" strokeWidth="2" opacity="0.9" />
-
-            <defs>
-              <linearGradient id="cube-top" x1="35" y1="25" x2="165" y2="100" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.75" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.6" />
-              </linearGradient>
-              <linearGradient id="cube-right" x1="100" y1="62" x2="165" y2="175" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#0284c7" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#0369a1" stopOpacity="0.5" />
-              </linearGradient>
-              <linearGradient id="cube-left" x1="35" y1="62" x2="100" y2="175" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.7" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
     </div>
   );
 }

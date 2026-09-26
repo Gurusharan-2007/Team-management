@@ -13,7 +13,15 @@ type CookieOptions = {
 };
 
 export async function createClient() {
-  const cookieStore = cookies();
+  let cookieStore: any;
+  try {
+    cookieStore = cookies();
+  } catch {
+    cookieStore = {
+      getAll: () => [],
+      setAll: () => {},
+    };
+  }
 
   const rawUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -88,10 +96,17 @@ export async function getCurrentUser(): Promise<CurrentUserData> {
       };
     }
 
-    const cookieStore = cookies();
-    const devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
-    const devName = cookieStore.get("dev_full_name")?.value || null;
-    const devRole = (cookieStore.get("dev_role")?.value as UserRole) || "captain";
+    let devAvatar = null;
+    let devName = null;
+    let devRole: UserRole = "captain";
+    try {
+      const cookieStore = cookies();
+      devAvatar = cookieStore.get("dev_avatar_url")?.value || null;
+      devName = cookieStore.get("dev_full_name")?.value || null;
+      devRole = (cookieStore.get("dev_role")?.value as UserRole) || "captain";
+    } catch {
+      // Outside request scope
+    }
 
     // Local preview fallback mock (development / non-production only)
     return {

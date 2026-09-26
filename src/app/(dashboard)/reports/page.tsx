@@ -22,6 +22,7 @@ import { IndividualTrendChart } from "@/components/reports/individual-trend-char
 import { MemberReportsTable } from "@/components/reports/member-reports-table";
 import { AdminSchedulerDialog } from "@/components/reports/admin-scheduler-dialog";
 import { ReportWeekSelect } from "@/components/reports/report-week-select";
+import { DownloadReportButton } from "@/components/reports/download-report-button";
 import {
   FileText,
   Calendar,
@@ -126,8 +127,8 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
       {report ? (
         <div className="space-y-6">
           {/* Report Metadata Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-muted/40 p-3 rounded-lg border border-border/70 text-xs">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-muted/40 p-3 rounded-lg border border-border/70 text-xs">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-semibold text-foreground">Active Period:</span>
               <span className="font-mono text-muted-foreground">{selectedWeekLabel}</span>
               <Badge
@@ -137,10 +138,18 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 {report.status === "generated" ? "Finalized Snapshot" : "Open Cycle"}
               </Badge>
             </div>
-            <div className="text-[11px] text-muted-foreground">
-              {report.generated_at
-                ? `Generated on ${formatDateTime(report.generated_at)} (${teamTimezone})`
-                : "Scheduled for 8:00 PM Saturday snapshot"}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="text-[11px] text-muted-foreground">
+                {report.generated_at
+                  ? `Generated on ${formatDateTime(report.generated_at)} (${teamTimezone})`
+                  : "Scheduled for 8:00 PM Saturday snapshot"}
+              </div>
+              <DownloadReportButton
+                reportId={report.id}
+                weekStart={report.week_start}
+                weekEnd={report.week_end}
+                isFinalized={report.status === "generated"}
+              />
             </div>
           </div>
 
